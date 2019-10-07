@@ -92,6 +92,30 @@ void I2C_O2O_SendBytes(Uint16 * const values, Uint16 length)
 	// Stop Bit
 	I2caRegs.I2CMDR.bit.STP = 1;
 }
+void I2C_O2O_ReadBytes(Uint16 * const values, Uint16 length)
+{
+    // Set to Master, Repeat Mode, FREE, Start
+    I2caRegs.I2CMDR.all = 0x64A0;
+
+    while(I2caRegs.I2CMDR.bit.STT){}; //wait for start condition to be cleared
+
+    // Write values to I2C
+    for (Uint16 i = 0; i < length; i++)
+    {
+        // Wait if Transmit is not ready
+        while(!I2caRegs.I2CSTR.bit.RRDY);
+        values[i] = I2caRegs.I2CDRR.bit.DATA;
+
+        for(Uint16 j = 0xffff; j>1 ; j--);
+        for(Uint16 j = 0xffff; j>1 ; j--);
+        //for(Uint16 j = 0xffff; j>1 ; j--);
+
+
+    }
+
+    // Stop Bit
+    I2caRegs.I2CMDR.bit.STP = 1;
+}
 
 /*
  * <summary>

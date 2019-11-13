@@ -52,10 +52,13 @@ int main(void)
     Uint16 color[2];
     color[0] = genColor(0xff, 0xff, 0xff);
     color[1] = genColor(0, 0, 0);
+    Text hello = { .string = "HELLO", .color =color[0], .x =100, .y=100,.font = capitalLetter10};
+
     fillScreen(color[1]);
     while(1){
        // drawChar('A', color, capitalLetter10, 100, 100);
-        test(100, 100, 20);
+        //test(100, 100, 20)
+        drawText(hello);
         fillRect(100, 200, 20, 20, color[0]);
 //        if(touched()){
 //            point=getTouchPoint(0);

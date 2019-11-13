@@ -6,11 +6,10 @@
  */
 #include "DisplayLibrary.h"
 
-void drawChar( char letter, Uint16* color, FontInfo font, Uint32 x, Uint32 y){
+Uint16 drawChar( char letter, Uint16 color, FontInfo font, Uint32 x, Uint32 y){
     Uint16 letterIndex = (Uint16)letter - (Uint16)font.FirstChar;
     CharInfo character =font.Descrpitors[letterIndex];
-    Uint16 size = character.width*character.hight;
-    Uint16 dispChar[200]={0};
+   // Uint16 dispChar[200]={0};
     Uint16 strip;
     Uint16 check;
     Uint16 checkInit;
@@ -24,19 +23,11 @@ void drawChar( char letter, Uint16* color, FontInfo font, Uint32 x, Uint32 y){
         check = checkInit;
         strip =font.Bitmaps[character.offset+row];
         for(Uint16 col =0; col<character.width; col++){
-
-               switch(check&strip){
-                   case 0:
-                       dispChar[character.width*col+row]= color[1];
-                       break;
-                   default:
-                       dispChar[character.width*col+row]= color[0];
-               }
+               if(check&strip) drawPixel(x-row, y+col,  color);
                check = check>>1;
         }
     }
-    setWindow(x, y, x+character.width, y+character.hight);
-    pushColors(dispChar, character.width*character.hight);
+    return character.width;
 }
 void test(Uint32 x, Uint32 y , Uint16 side){
      Uint16 Disp[2500];
@@ -50,5 +41,12 @@ void test(Uint32 x, Uint32 y , Uint16 side){
      pushColors(Disp, length);
  }
 
-//void drawText(Text text);
+void drawText(Text text){
+    char * print = text.string;
+    Uint16 x = text.x, y=text.y;
+    Uint16 index=0;
+    while( print[index]){
+        y += drawChar(print[index++],text.color,text.font,x,y)+3;
+    }
+}
 //Text createText(char* string, Uint16* color, FontInfo font);

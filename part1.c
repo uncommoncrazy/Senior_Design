@@ -54,8 +54,9 @@ int main(void)
     color[1] = genColor(0, 0, 0);
     fillScreen(color[1]);
     while(1){
-        drawChar('A', color, capitalLetter10, 100, 100);
-
+       // drawChar('A', color, capitalLetter10, 100, 100);
+        test(100, 100, 20);
+        fillRect(100, 200, 20, 20, color[0]);
 //        if(touched()){
 //            point=getTouchPoint(0);
 //            drawHorzLine( 0, point.y, 300, genColor(0,0xff,0));

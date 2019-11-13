@@ -36,7 +36,19 @@ void drawChar( char letter, Uint16* color, FontInfo font, Uint32 x, Uint32 y){
         }
     }
     setWindow(x, y, x+character.width, y+character.hight);
-    pushColors(dispChar, character.width*character.hight, 1);
+    pushColors(dispChar, character.width*character.hight);
 }
+void test(Uint32 x, Uint32 y , Uint16 side){
+     Uint16 Disp[2500];
+     Uint16 length = side*side;
+     Uint16 color;
+     for(Uint16 count = 0; count<10000; count++){
+         color = count&0xff;
+         Disp[count]=genColor(color, color^0xff, 0);
+     }
+     setWindow(x, y, x+side, y+side);
+     pushColors(Disp, length);
+ }
+
 //void drawText(Text text);
 //Text createText(char* string, Uint16* color, FontInfo font);

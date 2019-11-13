@@ -20,7 +20,7 @@ void setRegister8(Uint16 *ptr, Uint16 value);
 void setRegister16(Uint16 *ptr, Uint16 value);
 void setRotation(Uint16 x);
 void setWindow(int32 x1, int32 y1, int32 x2, int32 y2);
-void pushColors(Uint16 *data, Uint16 len, Uint16 first);
+void pushColors(Uint16 *data, Uint16 len);
 Uint16 genColor(Uint16 r, Uint16 g, Uint16 b);
 void writeRegister24(Uint16 a, Uint32 d);
 void writeRegister32(Uint16 a, Uint32 d);

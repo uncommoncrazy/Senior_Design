@@ -65,6 +65,24 @@ void setWindow(int32 x1, int32 y1, int32 x2, int32 y2){
     writeRegister32(ILI9341_PAGEADDRSET, temp);
     LCD_CS_Off;
 }
+void pushColors(Uint16 *data, Uint16 len){
+    uint16_t color, hi, lo;
+//    CS_ACTIVE;
+    LCD_CS_On;
+    LCD_CD_Command;
+    LCD_Write8(0x2C);
+    //LCD_CS_Off;
+   // LCD_CS_On;
+    LCD_CD_Data;
+    while(len--) {
+      color = *data++;
+      hi    = color >> 8; // Don't simplify or merge these
+      lo    = color&0xff;      // lines, there's macro shenanigans
+      LCD_Write8(hi);         // going on.
+      LCD_Write8(lo);
+    }
+    LCD_CS_Off;
+}
 void flood(Uint16 color, Uint32 length){
     Uint16 blocks, hi ,lo , i;
     hi = (color>>8)&0xff;
@@ -205,24 +223,7 @@ void setRotation(Uint16 rotation){
      // For 9341, init default full-screen address window:
      setWindow(0, 0, TFTWIDTH - 1, TFTHEIGHT - 1); // CS_IDLE happens
 }
-void pushColors(Uint16 *data, Uint16 len, Uint16 first){
-    uint16_t color, hi, lo;
-//    CS_ACTIVE;
-    LCD_CS_On;
-    if(first) { // Issue GRAM write command only on first call
-        LCD_CD_Command;
-        LCD_Write8(0x2C);
-    }
-    LCD_CD_Data;
-    while(len--) {
-      color = *data++;
-      hi    = color >> 8; // Don't simplify or merge these
-      lo    = color;      // lines, there's macro shenanigans
-      LCD_Write8(hi);         // going on.
-      LCD_Write8(lo);
-    }
-    LCD_CS_Off;
-}
+
 Uint16 genColor(Uint16 r, Uint16 g, Uint16 b){
     return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
 }

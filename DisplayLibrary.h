@@ -18,7 +18,7 @@ typedef struct text_t{
 }Text;
 
 void drawChar( char letter, Uint16* color, FontInfo font, Uint32 x, Uint32 y);
-void pushRainBow(Uint32 x, Uint32 y , Uint16 side);
+void test(Uint32 x, Uint32 y , Uint16 side);
 //void drawText(Text text);
 //Text createText(char* string, Uint16* color, FontInfo font);
 #endif /* DISPLAYLIBRARY_H_ */

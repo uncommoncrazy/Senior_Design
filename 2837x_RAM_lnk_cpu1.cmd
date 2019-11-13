@@ -57,25 +57,21 @@ SECTIONS
    #endif
 #endif   
    
-   .text            : >>RAMM0 | RAMD0 |  RAMLS0 | RAMLS1 | RAMLS2 | RAMLS3 | RAMLS4,   PAGE = 0
-   .cinit           : > RAMM0,     	PAGE = 0
+   .text            : >>RAMM0 | RAMD0 |  RAMLS0 | RAMLS1 | RAMLS2 | RAMLS3 ,   PAGE = 0
+   .cinit           : > RAMLS4,     	PAGE = 0
    .pinit           : > RAMM0,     	PAGE = 0
    .switch          : > RAMM0,     	PAGE = 0
    .reset           : > RESET,     	PAGE = 0, TYPE = DSECT /* not used, */
 
-   .stack           : > RAMM1,     	PAGE = 1
+   .stack           : > RAMM1 ,     	PAGE = 1
    .ebss            : > RAMGS7,    	PAGE = 1
    .econst          : > RAMGS5,    	PAGE = 1
    .esysmem         : > RAMGS6,    	PAGE = 1
    Filter_RegsFile  : > RAMGS0,	   	PAGE = 1
    ramgs0           : > RAMGS0,    	PAGE = 1
    ramgs1           : > RAMGS1,    	PAGE = 1
-   RFFTIn 			: > RAMGS8,		PAGE = 1, ALIGN(1024)
-   RFFTOut 			: > RAMGS8,		PAGE = 1, ALIGN(1024)
-   RFFTTwiddle 		: > RAMGS8,		PAGE = 1, ALIGN(1024)
-   RFFTMag			: > RAMGS8,		PAGE = 1, ALIGN(512)
    Audio			: > RAMGS9,		PAGE = 1
-   DFT				: > RAMGS10 | RAMGS11,	PAGE = 1
+
    /* The following section definitions are required when using the IPC API Drivers */ 
     GROUP : > CPU1TOCPU2RAM, PAGE = 1
     {

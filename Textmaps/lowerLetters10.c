@@ -3,7 +3,7 @@
 */
 #include "lowerLetters10.h"
 /* Character bitmaps for Arial Narrow 10pt */
-Uint16 lowercase10Bitmaps[] =
+ Uint16 static lowercase10Bitmaps[] =
 {
     /* @0 'a' (5 pixels wide) */
     0x00, //
@@ -403,7 +403,7 @@ CharInfo lowercase10Descriptors[] =
 };
 
 /* Font information for Arial Narrow 10pt */
-const FontInfo lowercase10 =
+ FontInfo  const lowercase10 =
 {
     12, /*  Character height */
     'a', /*  Start character */

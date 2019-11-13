@@ -11,7 +11,7 @@
 
 /* Character bitmaps for Arial Narrow 10pt */
 #include"capitalLetters10.h"
-Uint16 capital10Bitmaps[] =
+ Uint16 static capital10Bitmaps[] =
 {
     /* @0 'A' (7 pixels wide) */
     0x10, //    #
@@ -359,7 +359,7 @@ CharInfo capital10Descriptors[] =
 };
 
 /* Font information for Arial Narrow 10pt */
-const FontInfo capitalLetter10 =
+ FontInfo  const capitalLetter10 =
 {
     10, /*  Character height */
     'A', /*  Start character */

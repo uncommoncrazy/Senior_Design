@@ -10,7 +10,7 @@
 */
 
 /* Character bitmaps for Arial Narrow 10pt */
-Uint16 numbers10Bitmaps[] =
+Uint16 static numbers10Bitmaps[] =
 {
     /* @0 '.' (1 pixels wide) */
     0x00, //
@@ -176,7 +176,7 @@ CharInfo numbers10Descriptors[] =
 
 
 /* Font information for Arial Narrow 10pt */
-const FontInfo numbers10FontInfo =
+ FontInfo const  numbers10 =
 {
     9, /*  Character height */
     '.', /*  Start character */

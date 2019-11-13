@@ -5,14 +5,14 @@
  *      Author: Claudine
  */
 #include "DisplayLibrary.h"
-
+//Font ariel10 = {lowercase10,capitalLetter10, numbers10};
 Uint16 drawChar( char letter, Uint16 color, FontInfo font, Uint32 x, Uint32 y){
-    Uint16 letterIndex = (Uint16)letter - (Uint16)font.FirstChar;
-    CharInfo character =font.Descrpitors[letterIndex];
    // Uint16 dispChar[200]={0};
     Uint16 strip;
     Uint16 check;
     Uint16 checkInit;
+    Uint16 letterIndex = (Uint16)letter - (Uint16)font.FirstChar;
+    CharInfo character =font.Descrpitors[letterIndex];
     if(character.width<=8){
         checkInit = 0x80;
     }else{
@@ -45,8 +45,16 @@ void drawText(Text text){
     char * print = text.string;
     Uint16 x = text.x, y=text.y;
     Uint16 index=0;
+    FontInfo fontData;
     while( print[index]){
-        y += drawChar(print[index++],text.color,text.font,x,y)+3;
+        if((Uint16)print[index]>(Uint16)lowercase10.FirstChar){
+            fontData=lowercase10;
+        }else if((Uint16)print[index]<(Uint16)capitalLetter10.FirstChar){
+            fontData=numbers10;
+        }else{
+            fontData=capitalLetter10;
+        }
+        y += drawChar(print[index++],text.color,fontData,x,y)+3;
     }
 }
 //Text createText(char* string, Uint16* color, FontInfo font);

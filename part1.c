@@ -52,7 +52,7 @@ int main(void)
     Uint16 color[2];
     color[0] = genColor(0xff, 0xff, 0xff);
     color[1] = genColor(0, 0, 0);
-    Text hello = { .string = "HELLO", .color =color[0], .x =100, .y=100,.font = capitalLetter10};
+    Text hello = { .string = "VCO", .color =color[0], .x =20, .y=0};
 
     fillScreen(color[1]);
     while(1){

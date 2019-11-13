@@ -10,7 +10,7 @@
 #include "MapInfo.h"
 
 extern Uint16 numbers10Bitmaps[];
-extern const FontInfo numbers10;
+extern  FontInfo const numbers10;
 extern CharInfo numbers10Descriptors[];
 
 

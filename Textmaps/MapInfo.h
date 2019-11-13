@@ -11,7 +11,7 @@
 typedef struct CINFO_t{
     Uint16 width, hight, offset;
 } CharInfo;
-typedef struct Font_t{
+typedef struct fontinfo_t{
     Uint16  hight;
     char    FirstChar, LastChar;
     const CharInfo* Descrpitors;

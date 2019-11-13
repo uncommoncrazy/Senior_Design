@@ -8,8 +8,8 @@
 #ifndef TEXTMAPS_CAPITALLETTERS10_H_
 #define TEXTMAPS_CAPITALLETTERS10_H_
 #include "MapInfo.h"
-extern  Uint16 capital10Bitmaps[];
-extern const FontInfo capitalLetter10;
+extern Uint16 capital10Bitmaps[];
+extern  FontInfo const capitalLetter10;
 extern  CharInfo capital10Descriptors[];
 
 

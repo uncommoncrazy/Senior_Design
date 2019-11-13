@@ -7,7 +7,7 @@
 
 #ifndef ONETOONEI2CDRIVER_H_
 #define ONETOONEI2CDRIVER_H_
-
+#include <F2837xD_Device.h>
 /*
  * <summary>
  * 	Initializes the I2C to run in Master Mode for a One-To-One connection
@@ -27,5 +27,5 @@ void I2C_O2O_Master_Init(Uint16 slaveAddress, float32 sysClkMhz, float32 I2CClkK
  */
 void I2C_O2O_SendBytes(Uint16 * const values, Uint16 length);
 
-
+void I2C_O2O_ReadBytes(Uint16 * const values, Uint16 length);
 #endif /* ONETOONEI2CDRIVER_H_ */

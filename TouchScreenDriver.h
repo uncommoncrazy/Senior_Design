@@ -28,15 +28,16 @@
 #define FT62XX_VENDID 0x11
 #define FT6206_CHIPID 0x06
 #define FT6236_CHIPID 0x36
-#define FT6236U_CHIPID 0x64 // mystery!
+#define FT6236U_CHIPID 0x64
 extern Uint16 touches;
 extern Uint16 touchX[2], touchY[2], touchID[2];
+extern Uint16 TSreadBuff[16], TSwriteBuff[4];
 // calibrated for Adafruit 2.8" ctp screen
 #define FT62XX_DEFAULT_THRESHOLD 128
 typedef struct point_t{
-    int16 x,y,z;
+    int16 x,y;
 } TouchPoint;
-Unit16 TS_init(Uint16 thresh);
+Uint16 TS_init(Uint16 thresh);
 Uint16 touched();
 TouchPoint getTouchPoint();
 Uint16 TS_readRegister8(Uint16 r);

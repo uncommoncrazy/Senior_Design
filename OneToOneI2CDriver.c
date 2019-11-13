@@ -5,7 +5,7 @@
  *      Author: Raz Aloni
  */
 
-#include <F2837xD_Device.h>
+
 #include "OneToOneI2CDriver.h"
 
 /* Ideal module clock frequency for I2C */
@@ -70,8 +70,10 @@ void I2C_O2O_Master_Init(Uint16 slaveAddress, float32 sysClkMhz, float32 I2CClkK
  */
 void I2C_O2O_SendBytes(Uint16 * const values, Uint16 length)
 {
+    EALLOW;
+
 	// Set to Master, Repeat Mode, TRX, FREE, Start
-	I2caRegs.I2CMDR.all = 0x66A0;
+	I2caRegs.I2CMDR.all  = 0x66A0;
 
 	while(I2caRegs.I2CMDR.bit.STT){}; //wait for start condition to be cleared
 
@@ -94,11 +96,12 @@ void I2C_O2O_SendBytes(Uint16 * const values, Uint16 length)
 }
 void I2C_O2O_ReadBytes(Uint16 * const values, Uint16 length)
 {
+    EALLOW;
+
     // Set to Master, Repeat Mode, FREE, Start
     I2caRegs.I2CMDR.all = 0x64A0;
 
-    while(I2caRegs.I2CMDR.bit.STT){}; //wait for start condition to be cleared
-
+    while(I2caRegs.I2CMDR.bit.STT){};
     // Write values to I2C
     for (Uint16 i = 0; i < length; i++)
     {

@@ -28,7 +28,6 @@ extern Uint16 reverbflag;
 extern Uint32  fxCounter;
 extern Uint16 intrpStatus;
 extern int16 DMA_audioIn[2];
-extern int16 DMA_audioIn[2];
 
 extern int16 audioIn;
 extern int16 *audioInput;

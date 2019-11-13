@@ -11,6 +11,8 @@
 #include <stdlib.h>
 
 #include "IODriver.h"
+#include "TFTLCD_Driver.h"
+#include "TouchScreenDriver.h"
 #define     left        0
 #define     right       1
 Uint16  channel = left;
@@ -26,7 +28,7 @@ __interrupt void BUT3_isr(void);
 Uint16 Buttons[3]={0,0,0};
 Uint16  index = 0;
 Uint16 adcSignal = 0;
-
+TouchPoint point;
 int main(void)
 {
     InitSysCtrl();
@@ -48,13 +50,16 @@ int main(void)
     Init_LCDPins();
     startLCD();
     fillScreen(genColor(0xff, 0, 0));
+    DELAY_US(1000000);
+    fillRect( 100, 100, 100, 100, genColor( 0, 0,0xff));
+    TS_init(0);
     while(1){
-        fillScreen(genColor(0xff, 0, 0));
-        DELAY_US(1000000);
-        fillScreen(genColor(0, 0xff, 0));
-        DELAY_US(1000000);
-        fillScreen(genColor(0, 0, 0xff));
-        DELAY_US(1000000);
+        if(touched()){
+            point=getTouchPoint(0);
+            drawHorzLine( 0, point.y, 300, genColor(0,0xff,0));
+            drawVertLine( point.x, 0, 800, genColor(0,0xff,0));
+        }
+        DELAY_US(10000);
     }
 }
 

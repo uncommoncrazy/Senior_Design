@@ -53,14 +53,15 @@ void resetLCD(){
     for (Uint16 i = 0; i <3 ; i++) LCD_WR_Strobe;
     LCD_CS_Off;
 }
-void setWindow(int x1, int y1, int x2, int y2){
+void setWindow(int32 x1, int32 y1, int32 x2, int32 y2){
     LCD_CS_On;
-    Uint32 temp;
-    temp = x1 << 16;
-    temp |= x2;
+    int32 temp = (x2);
+    temp |= x1 << 16;
+
     writeRegister32(ILI9341_COLADDRSET, temp);
-    temp = y1 << 16;
-    temp |= y2;
+    temp = (y2);
+    temp |= y1 << 16;
+
     writeRegister32(ILI9341_PAGEADDRSET, temp);
     LCD_CS_Off;
 }
@@ -175,7 +176,7 @@ void fillRect(int16 x, int16 y, int16 w, int16 h, Uint16 color){
         h= y2-y+1;
     }
     setWindow(x,y,x2,y2);
-    flood(color, (Uint32)w*(Uint32)h);
+    flood(color, ((Uint32)w)*((Uint32)h));
 }
 void fillScreen(Uint16 color){
     setWindow(0, 0, TFTWIDTH-1, TFTHEIGHT-1);

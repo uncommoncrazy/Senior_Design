@@ -50,6 +50,7 @@ int main(void)
     IFR = 0x0000;
     InitPieVectTable();
     EALLOW;
+    ConfigCpuTimer(Timer, Freq, Period)
     Init_McBSPbInterrupt(&MSBR_isr);
     Init_butInterrupt(&BUT1_isr,&BUT2_isr,&BUT3_isr);
    //Enable group 1 interrupts

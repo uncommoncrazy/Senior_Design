@@ -149,32 +149,49 @@ void InitMcBSPb()
 
     /*
      * MDXB -> GPIO24
+     * New MDXB  -> GPIO84
      * MDRB -> GPIO25
+     * New MDRB -> GPIO13
      * MCLKRB -> GPIO60
+     * New MCLKRB -> GPIO60
      * MCLKXB -> GPIO26
+     * New MCLKXB -> GPIO26
      * MFSRB -> GPIO61
+     * New MFSRB -> GPIO1
      * MFSXB -> GPIO27
+     * New MFSXB -> GPIO27
      */
     EALLOW;
 
     // MDXB -> GPIO24 (GPIOA)
+    GpioCtrlRegs.GPCGMUX2.bit.GPIO84 = 1;
+    GpioCtrlRegs.GPCMUX2.bit.GPIO84 = 2;
+    GpioCtrlRegs.GPCQSEL2.bit.GPIO84 = 3;
 
-    GpioCtrlRegs.GPAGMUX2.bit.GPIO24 = 0;
-    GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 3;
-    GpioCtrlRegs.GPAQSEL2.bit.GPIO24 = 3;
+//    GpioCtrlRegs.GPAGMUX2.bit.GPIO24 = 0;
+//    GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 3;
+//    GpioCtrlRegs.GPAQSEL2.bit.GPIO24 = 3;
 
     // MDRB -> GPIO25 (GPIOA)
 
-    GpioCtrlRegs.GPAGMUX2.bit.GPIO25 = 0;
-    GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 3;
-    GpioCtrlRegs.GPAQSEL2.bit.GPIO25 = 3;
+    GpioCtrlRegs.GPAGMUX1.bit.GPIO13 = 0;
+    GpioCtrlRegs.GPAMUX1.bit.GPIO13 = 3;
+    GpioCtrlRegs.GPAQSEL1.bit.GPIO13 = 3;
+
+
+//    GpioCtrlRegs.GPAGMUX2.bit.GPIO25 = 0;
+//    GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 3;
+//    GpioCtrlRegs.GPAQSEL2.bit.GPIO25 = 3;
 
     // MFSRB -> GPIO61 (GPIOB)
 
-    GpioCtrlRegs.GPBGMUX2.bit.GPIO61 = 0;
-    GpioCtrlRegs.GPBMUX2.bit.GPIO61 = 1;
-    GpioCtrlRegs.GPBQSEL2.bit.GPIO61 = 3;
+//    GpioCtrlRegs.GPBGMUX2.bit.GPIO61 = 0;
+//    GpioCtrlRegs.GPBMUX2.bit.GPIO61 = 1;
+//    GpioCtrlRegs.GPBQSEL2.bit.GPIO61 = 3;
 
+    GpioCtrlRegs.GPAGMUX1.bit.GPIO1 = 0;
+    GpioCtrlRegs.GPAMUX1.bit.GPIO1 = 3;
+    GpioCtrlRegs.GPAQSEL1.bit.GPIO1 = 3;
     // MFSXB -> GPIO27 (GPIOA)
 
     GpioCtrlRegs.GPAGMUX2.bit.GPIO27 = 0;
@@ -183,9 +200,12 @@ void InitMcBSPb()
 
     // MCLKRB -> GPIO60 (GPIOB)
 
-    GpioCtrlRegs.GPBGMUX2.bit.GPIO60 = 0;
-    GpioCtrlRegs.GPBMUX2.bit.GPIO60 = 1;
-    GpioCtrlRegs.GPBQSEL2.bit.GPIO60 = 3;
+//    GpioCtrlRegs.GPBGMUX2.bit.GPIO60 = 0;
+//    GpioCtrlRegs.GPBMUX2.bit.GPIO60 = 1;
+//    GpioCtrlRegs.GPBQSEL2.bit.GPIO60 = 3;
+    GpioCtrlRegs.GPAGMUX1.bit.GPIO3 = 0;
+    GpioCtrlRegs.GPAMUX1.bit.GPIO3 = 3;
+    GpioCtrlRegs.GPAQSEL1.bit.GPIO3 = 3;
 
     // MCLKXB -> GPIO26 (GPIOA)
 
@@ -318,6 +338,8 @@ void InitSPIA()
 
     //SPISTEA -> GPIO19
     //SPISIMOA -> GPIO58
+    //New SPISIMOA -> GPIO16
+
     //SPICLKA -> GPIO18
 
     EALLOW;
@@ -325,20 +347,24 @@ void InitSPIA()
     //enable pullups
     GpioCtrlRegs.GPAPUD.bit.GPIO19 = 0;
     GpioCtrlRegs.GPAPUD.bit.GPIO18 = 0;
-    GpioCtrlRegs.GPBPUD.bit.GPIO58 = 0;
+    //GpioCtrlRegs.GPAPUD.bit.GPIO58 = 0;
+    GpioCtrlRegs.GPAPUD.bit.GPIO16 = 0;
 
     GpioCtrlRegs.GPAGMUX2.bit.GPIO19 = 0;
     GpioCtrlRegs.GPAGMUX2.bit.GPIO18 = 0;
-    GpioCtrlRegs.GPBGMUX2.bit.GPIO58 = 3;
+   // GpioCtrlRegs.GPBGMUX2.bit.GPIO58 = 3;
+    GpioCtrlRegs.GPAGMUX2.bit.GPIO16 = 0;
 
     GpioCtrlRegs.GPAMUX2.bit.GPIO19 = 1;
     GpioCtrlRegs.GPAMUX2.bit.GPIO18 = 1;
-    GpioCtrlRegs.GPBMUX2.bit.GPIO58 = 3;
+    //GpioCtrlRegs.GPBMUX2.bit.GPIO58 = 3;
+    GpioCtrlRegs.GPAMUX2.bit.GPIO16 = 1;
 
     //asynch qual
     GpioCtrlRegs.GPAQSEL2.bit.GPIO19 = 3;
     GpioCtrlRegs.GPAQSEL2.bit.GPIO18 = 3;
-    GpioCtrlRegs.GPBQSEL2.bit.GPIO58 = 3;
+    //GpioCtrlRegs.GPBQSEL2.bit.GPIO58 = 3;
+    GpioCtrlRegs.GPAQSEL2.bit.GPIO16 = 3;
 
     EDIS;
 

@@ -11,7 +11,7 @@
 
 /* Character bitmaps for Arial Narrow 10pt */
 #include"capitalLetters10.h"
- Uint16 static capital10Bitmaps[] =
+ Uint16 capital10Bitmaps[] =
 {
     /* @0 'A' (7 pixels wide) */
     0x10, //    #

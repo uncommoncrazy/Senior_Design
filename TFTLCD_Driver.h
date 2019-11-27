@@ -25,4 +25,5 @@ Uint16 genColor(Uint16 r, Uint16 g, Uint16 b);
 void writeRegister24(Uint16 a, Uint32 d);
 void writeRegister32(Uint16 a, Uint32 d);
 Uint16 readColor(int16 x, int16 y);
+Uint16 getID();
 #endif

@@ -49,6 +49,7 @@ int main(void)
 
     Init_LCDPins();
     startLCD();
+    Uint16 ID=getID();
     Uint16 color[2];
     color[0] = genColor(0xff, 0xff, 0xff);
     color[1] = genColor(0, 0, 0);
@@ -59,13 +60,18 @@ int main(void)
        // drawChar('A', color, capitalLetter10, 100, 100);
         //test(100, 100, 20)
         //drawText(hello);
-        fillRect(100, 200, 20, 20, color[0]);
+        fillScreen(color[1]);
+
+        //fillRect(100, 200, 20, 20, color[0]);
 //        if(touched()){
 //            point=getTouchPoint(0);
 //            drawHorzLine( 0, point.y, 300, genColor(0,0xff,0));
 //            drawVertLine( point.x, 0, 800, genColor(0,0xff,0));
 //        }
-//        DELAY_US(10000);
+        DELAY_US(10000);
+        fillScreen(color[0]);
+        DELAY_US(10000);
+
     }
 }
 

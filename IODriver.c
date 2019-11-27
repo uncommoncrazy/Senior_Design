@@ -89,11 +89,17 @@ void LCD_Write8(Uint16 Data){
     LCD_WR_Strobe;
 }
 Uint16 LCD_Read8(){
+
+    LCD_Delay;
     LCD_Read_On;
     LCD_Delay;
     Uint16 result = GpioDataRegs.GPADAT.all & LCDDataPins;
+    int16 read = result&1;
+    read |= (result>>1)&2;
+    read |= (result>>2)&0b01111100;
+    read |= (result>>3)&0x80;
     LCD_Read_Off;
-    return result;
+    return read;
 }
 void LCD_WriteReg8(Uint16 address, Uint16 data){
 LCD_CD_Command;

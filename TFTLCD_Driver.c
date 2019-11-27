@@ -17,6 +17,7 @@ void LCD_init(){
  LCD_Read_Off;
  LCD_CD_Data;
 }
+
 void startLCD(){
     resetLCD();
     DELAY_US(200000);
@@ -226,6 +227,36 @@ void setRotation(Uint16 rotation){
 
 Uint16 genColor(Uint16 r, Uint16 g, Uint16 b){
     return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
+}
+void writeCommand(Uint16 d){
+LCD_CS_On;
+LCD_CD_Command;
+LCD_Write8(d);
+LCD_CS_Off;
+}
+void readStrobe(){
+  LCD_CS_On;
+  LCD_CD_Data;
+
+}
+Uint16 getID(){
+    writeCommand(0xD3);
+    LCD_DIR_RD;
+    LCD_CS_On;
+    LCD_CD_Data;
+    LCD_Read8();
+    LCD_Delay;
+    LCD_Delay;
+    LCD_Read8();
+    LCD_Delay;
+    LCD_Delay;
+    Uint16 Id= LCD_Read8()<<8;
+    LCD_Delay;
+    LCD_Delay;
+    Id |= LCD_Read8();
+    LCD_CS_Off;
+    LCD_DIR_Write;
+    return Id;
 }
 void writeRegister24(Uint16 r, Uint32 d){
      LCD_CS_On;

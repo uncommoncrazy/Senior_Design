@@ -58,7 +58,7 @@ int main(void)
     while(1){
        // drawChar('A', color, capitalLetter10, 100, 100);
         //test(100, 100, 20)
-        drawText(hello);
+        //drawText(hello);
         fillRect(100, 200, 20, 20, color[0]);
 //        if(touched()){
 //            point=getTouchPoint(0);

@@ -8,7 +8,7 @@
 #ifndef IODRIVER_H_
 #define IODRIVER_H_
 #include <F28x_Project.h>
-#define     LCDDataPins     0bx00005F5
+#define     LCDDataPins     0x000005F5
 #define     nLCDDataPins    0xfffffA0A
 // LCD control pins GPIOB GPIO: 32-RD, 11-WR, 12-CD, 15-CS
 #define     LCDCtrlPins     0x00009800
@@ -19,7 +19,7 @@
 #define     PU          (PBPins|SwitchPins)
 #define     LCD_Write_Off   GpioDataRegs.GPADAT.bit.GPIO11=1
 #define     LCD_Write_On    GpioDataRegs.GPADAT.bit.GPIO11=0
-#define     LCD_Read_Off    GpioDataRegs.GPDAT.bit.GPIO33=1
+#define     LCD_Read_Off    GpioDataRegs.GPBDAT.bit.GPIO33=1
 #define     LCD_Read_On     GpioDataRegs.GPBDAT.bit.GPIO33=0
 #define     LCD_CD_Data     GpioDataRegs.GPADAT.bit.GPIO12=1
 #define     LCD_CD_Command  GpioDataRegs.GPADAT.bit.GPIO12=0

@@ -85,13 +85,16 @@ void pushColors(Uint16 *data, Uint16 len){
     LCD_CS_Off;
 }
 void flood(Uint16 color, Uint32 length){
+    LCD_CS_On;
     Uint16 blocks, hi ,lo , i;
     hi = (color>>8)&0xff;
     lo = color&0xff;
     LCD_CS_On;
     LCD_CD_Command;
     LCD_Write8(0x2C);
+    LCD_Delay;
     LCD_CD_Data;
+    LCD_Delay;
     LCD_Write8(hi);
     LCD_Write8(lo);
     length--;
@@ -101,7 +104,7 @@ void flood(Uint16 color, Uint32 length){
             i = 16;
             do{
                 LCD_WR_Strobe;
-                LCD_WR_Strobe;
+                 LCD_WR_Strobe;
                 LCD_WR_Strobe;
                 LCD_WR_Strobe;
                 LCD_WR_Strobe;
@@ -139,6 +142,7 @@ void drawPixel(int16 x, int16 y, Uint16 color){
     if(( x<0 )||(y<0)||(y>=TFTHEIGHT)||(x>=TFTWIDTH)) return;
     LCD_CS_On;
     setWindow(x,y,TFTWIDTH-1,TFTHEIGHT-1);
+    LCD_CS_On;
     LCD_CS_On;
     LCD_CD_Command;
     LCD_Write8(0x2C);

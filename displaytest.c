@@ -53,14 +53,16 @@ int main(void)
     Uint16 color[2];
     color[0] = genColor(0xff, 0xff, 0xff);
     color[1] = genColor(0, 0, 0);
-    Text hello = { .string = "VCO", .color =color[0], .x =20, .y=0};
+    Text hello = { .string = "VCO", .color =color[0], .x =200, .y=100};
 
     fillScreen(color[1]);
     while(1){
-       // drawChar('A', color, capitalLetter10, 100, 100);
+
+        drawChar('A', color[0], capitalLetter10, 100, 100);
         //test(100, 100, 20)
-        //drawText(hello);
-       // fillScreen(color[1]);
+       //drawText(hello);
+       //fillScreen(color[1]);
+       DELAY_US(100000);
 
         //fillRect(100, 200, 20, 20, color[0]);
 //        if(touched()){
@@ -69,8 +71,8 @@ int main(void)
 //            drawVertLine( point.x, 0, 800, genColor(0,0xff,0));
 //        }
         //DELAY_US(10000);
-        fillScreen(color[0]);
-        DELAY_US(10000);
+        //fillScreen(color[0]);
+       // DELAY_US(100000);
 
     }
 }

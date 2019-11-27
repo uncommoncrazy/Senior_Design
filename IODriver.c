@@ -79,13 +79,16 @@ void Init_LCDPins(){
    GpioCtrlRegs.GPADIR.bit.GPIO15 =1;//CS
 }
 void LCD_Write8(Uint16 Data){
+    LCD_Delay;
     int16 send = Data&1;
     send |= (Data&2)<<1;
     send |= (Data&0b01111100)<<2;
     send |= (Data&0x80)<<3;
 
     GpioDataRegs.GPASET.all = send & LCDDataPins;
+    LCD_Delay;
     GpioDataRegs.GPACLEAR.all = ~send & LCDDataPins;
+    LCD_Delay;
     LCD_WR_Strobe;
 }
 Uint16 LCD_Read8(){
@@ -102,10 +105,12 @@ Uint16 LCD_Read8(){
     return read;
 }
 void LCD_WriteReg8(Uint16 address, Uint16 data){
-LCD_CD_Command;
-LCD_Write8(address);
-LCD_CD_Data;
-LCD_Write8(data);
+    LCD_Delay;
+    LCD_CD_Command;
+    LCD_Write8(address);
+    LCD_Delay;
+    LCD_CD_Data;
+    LCD_Write8(data);
 }
 void LCD_WriteReg16(Uint16 address, Uint16 data){
 LCD_CD_Command;

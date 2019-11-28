@@ -73,10 +73,24 @@ Uint16 getSwitches(){
 void Init_LCDPins(){
    EALLOW;
    GpioCtrlRegs.GPADIR.all |= LCDDataPins;
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO0 = 3;
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO2 = 3;
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO4 = 3;
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO5 = 3;
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO6 = 3;
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO7 = 3;
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO8 = 3;
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO10 = 3;
+
    GpioCtrlRegs.GPBDIR.bit.GPIO33 =1;//RD
+   GpioCtrlRegs.GPBQSEL1.bit.GPIO33 = 3;
    GpioCtrlRegs.GPADIR.bit.GPIO11 =1;//WR
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO11 = 3;
    GpioCtrlRegs.GPADIR.bit.GPIO12 =1;//C/D
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO12 = 3;
    GpioCtrlRegs.GPADIR.bit.GPIO15 =1;//CS
+   GpioCtrlRegs.GPAQSEL1.bit.GPIO15 = 3;
+
 }
 void LCD_Write8(Uint16 Data){
     LCD_Delay;

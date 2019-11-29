@@ -7,7 +7,9 @@
 
 
 #include "OneToOneI2CDriver.h"
-
+Uint16 I2CA_Status =0;
+Uint16 I2CA_Write[10]={0};
+Uint16 I2CA_Read[10]={0};
 /* Ideal module clock frequency for I2C */
 static const Uint16 IdealModClockFrqMHz = 12;
 
@@ -68,10 +70,10 @@ void I2C_O2O_Master_Init(Uint16 slaveAddress, float32 sysClkMhz, float32 I2CClkK
  * <param="values">Pointer to array of bytes to send</param>
  * <param-"length">Length of array</param>
  */
-void I2C_O2O_SendBytes(Uint16 * const values, Uint16 length)
+Uint16 I2C_O2O_SendBytes(Uint16 * const values, Uint16 length)
 {
     EALLOW;
-
+    if(I2caRegs.I2CSTR.bit.BB == 1)return I2CA_Busy;
 	// Set to Master, Repeat Mode, TRX, FREE, Start
 	I2caRegs.I2CMDR.all  = 0x66A0;
 
@@ -82,10 +84,11 @@ void I2C_O2O_SendBytes(Uint16 * const values, Uint16 length)
 	{
 		// Wait if Transmit is not ready
 		while(!I2caRegs.I2CSTR.bit.XRDY);
+		if(I2caRegs.I2CSTR.bit.NACK)return I2CA_NACK;
 		I2caRegs.I2CDXR.bit.DATA = values[i];
 
-		for(Uint16 j = 0xffff; j>1 ; j--);
-        for(Uint16 j = 0xffff; j>1 ; j--);
+		//for(Uint16 j = 0xffff; j>1 ; j--);
+        //for(Uint16 j = 0xffff; j>1 ; j--);
         //for(Uint16 j = 0xffff; j>1 ; j--);
 
 
@@ -93,13 +96,15 @@ void I2C_O2O_SendBytes(Uint16 * const values, Uint16 length)
 
 	// Stop Bit
 	I2caRegs.I2CMDR.bit.STP = 1;
+	return I2CA_Succesful;
 }
-void I2C_O2O_ReadBytes(Uint16 * const values, Uint16 length)
+Uint16 I2C_O2O_ReadBytes(Uint16 * const values, Uint16 length)
 {
     EALLOW;
-
+    if(I2caRegs.I2CSTR.bit.BB == 1)return I2CA_Busy;
+    I2caRegs.I2CCNT= length;
     // Set to Master, Repeat Mode, FREE, Start
-    I2caRegs.I2CMDR.all = 0x64A0;
+    I2caRegs.I2CMDR.all = 0x6C20;
 
     while(I2caRegs.I2CMDR.bit.STT){};
     // Write values to I2C
@@ -109,15 +114,14 @@ void I2C_O2O_ReadBytes(Uint16 * const values, Uint16 length)
         while(!I2caRegs.I2CSTR.bit.RRDY);
         values[i] = I2caRegs.I2CDRR.bit.DATA;
 
-        for(Uint16 j = 0xffff; j>1 ; j--);
-        for(Uint16 j = 0xffff; j>1 ; j--);
+      //  for(Uint16 j = 0xffff; j>1 ; j--);
+       // for(Uint16 j = 0xffff; j>1 ; j--);
         //for(Uint16 j = 0xffff; j>1 ; j--);
 
 
     }
-
+    return I2CA_Succesful;
     // Stop Bit
-    I2caRegs.I2CMDR.bit.STP = 1;
 }
 
 /*

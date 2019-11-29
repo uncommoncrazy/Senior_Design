@@ -8,6 +8,12 @@
 #ifndef ONETOONEI2CDRIVER_H_
 #define ONETOONEI2CDRIVER_H_
 #include <F2837xD_Device.h>
+#define I2CA_Succesful 0x00
+#define I2CA_Busy 0x01
+#define I2CA_NACK 0x02
+extern Uint16 I2CA_Status;
+extern Uint16 I2CA_Write[10];
+extern Uint16 I2CA_Read[10];
 /*
  * <summary>
  * 	Initializes the I2C to run in Master Mode for a One-To-One connection

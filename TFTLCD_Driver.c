@@ -62,7 +62,7 @@ void setWindow(int32 x1, int32 y1, int32 x2, int32 y2){
     writeRegister32(ILI9341_COLADDRSET, temp);
     temp = (y2);
     temp |= y1 << 16;
-
+    LCD_CS_On;
     writeRegister32(ILI9341_PAGEADDRSET, temp);
     LCD_CS_Off;
 }

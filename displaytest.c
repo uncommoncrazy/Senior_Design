@@ -58,13 +58,13 @@ int main(void)
     fillScreen(color[1]);
     while(1){
 
-        drawChar('A', color[0], capitalLetter10, 100, 100);
+       // drawChar('A', color[0], capitalLetter10, 100, 100);
         //test(100, 100, 20)
-       //drawText(hello);
+       drawText(hello);
        //fillScreen(color[1]);
        DELAY_US(100000);
 
-        //fillRect(100, 200, 20, 20, color[0]);
+        //fillRect(50, 100, 20, 20, color[0]);
 //        if(touched()){
 //            point=getTouchPoint(0);
 //            drawHorzLine( 0, point.y, 300, genColor(0,0xff,0));
@@ -72,7 +72,7 @@ int main(void)
 //        }
         //DELAY_US(10000);
         //fillScreen(color[0]);
-       // DELAY_US(100000);
+       DELAY_US(100000);
 
     }
 }

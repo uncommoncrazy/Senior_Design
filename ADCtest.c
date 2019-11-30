@@ -8,17 +8,15 @@
 #include<F28x_Project.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "LCDDriver.h"
+#include "DisplayLibrary.h"
 #include "ADCDriver.h"
 __interrupt void adca1_isr(void);
 
 Uint16 adcSignal = 0;
 int main(void)
 {
-    Uint16 * const I2C_Data = LCDBuffer();
     InitSysCtrl();
     InitGpio();
-    Init_LCD(I2C_Data);
     EALLOW;
     DINT;
     InitPieCtrl();
@@ -37,13 +35,23 @@ int main(void)
     Init_ADC();
     SetupADCTimer1();
     Uint16 lastconversion = 0;
+    Init_LCDPins();
+    startLCD();
+ //   Uint16 ID=getID();
+    Uint16 color[2];
+    color[0] = genColor(0xff, 0xff, 0xff);
+    color[1] = genColor(0, 0, 0);
+    Text ADCValue = { .string = "Voltage = ", .color =color[0], .x =200, .y=0};
+
     while(1){
         if(convertADC(lastconversion&0xfff) != convertADC(adcSignal&0xfff)){
-            LCD_Command(Home,I2C_Data);
-            LCD_String("Voltmeter= ", I2C_Data);
-            LCD_float(convertADC(adcSignal),I2C_Data);
-            LCD_String("V", I2C_Data);
+           // fillScreen(color[1]);
+            //drawText(ADCValue);
+            //drawThousands(adcSignal>>2,200,100, color[0]);
+            drawChar('V', color[0], 200, drawFloat(convertADC(adcSignal),200,  drawText(ADCValue), color[0]));
             lastconversion = adcSignal;
+            //DELAY_US(100000);
+
         }
     }
 }

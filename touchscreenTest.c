@@ -12,7 +12,7 @@
 
 #include "IODriver.h"
 #include "TFTLCD_Driver.h"
-//#include "TouchScreenDriver.h"
+#include "TouchScreenDriver.h"
 #include "DisplayLibrary.h"
 #define     left        0
 #define     right       1
@@ -29,6 +29,7 @@ __interrupt void BUT3_isr(void);
 Uint16 Buttons[3]={0,0,0};
 Uint16  index = 0;
 Uint16 adcSignal = 0;
+Uint16 testCheck = 1;
 int main(void)
 {
     InitSysCtrl();
@@ -53,16 +54,25 @@ int main(void)
     Uint16 color[2];
     color[0] = genColor(0xff, 0xff, 0xff);
     color[1] = genColor(0, 0, 0);
-    Text hello = { .string = "hell0o thAere my name is theador", .color =color[0], .x =200, .y=100};
+    Text Result = { .string = "pass", .color =color[0], .x =200, .y=100};
 
     fillScreen(color[1]);
+    DELAY_US(10000);
     while(1){
 
        // drawChar('A', color[0], capitalLetter10, 100, 100);
         //test(100, 100, 20)
        // drawThousandsFloat(3.25,100,100, color[0]);
-
-       drawText(hello);
+       if(testCheck){
+           if(TS_init(40)){
+               Result.string = "pass";
+               testCheck = 0;
+           }else{
+               Result.string = "fail";
+           }
+       }
+       fillScreen(color[1]);
+       drawText(Result);
        //fillScreen(color[1]);
        DELAY_US(100000);
 
@@ -74,7 +84,6 @@ int main(void)
 //        }
         //DELAY_US(10000);
         //fillScreen(color[0]);
-       DELAY_US(100000);
 
     }
 }

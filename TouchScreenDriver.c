@@ -10,7 +10,11 @@ Uint16 touchX[2]={0}, touchY[2]={0}, touchID[2]={0};
 Uint16 TSreadBuff[16]={0}, TSwriteBuff[4]={0};
 Uint16 TS_init(Uint16 thresh){
     I2C_O2O_Master_Init(FT62XX_ADDR, 200.0,11.0);
-    return 0;
+    TS_writeRegister8(FT62XX_REG_THRESHHOLD, 40);
+    if(TS_readRegister8(FT62XX_REG_VENDID)!=FT62XX_VENDID) return 0;
+    Uint16 ID = TS_readRegister8(FT62XX_REG_CHIPID);
+    if((ID!=FT6206_CHIPID)&&(ID!=FT6236U_CHIPID)&&(ID!=FT6236_CHIPID)) return 0;
+    return 1;
 }
 Uint16 touched(){
    int t = TS_readRegister8(FT62XX_REG_NUMTOUCHES);

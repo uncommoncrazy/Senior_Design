@@ -31,7 +31,7 @@ void I2C_O2O_Master_Init(Uint16 slaveAddress, float32 sysClkMhz, float32 I2CClkK
  * <param="values">Pointer to array of bytes to send</param>
  * <param-"length">Length of array</param>
  */
-void I2C_O2O_SendBytes(Uint16 * const values, Uint16 length);
+Uint16 I2C_O2O_SendBytes(Uint16 * const values, Uint16 length);
 
-void I2C_O2O_ReadBytes(Uint16 * const values, Uint16 length);
+Uint16 I2C_O2O_ReadBytes(Uint16 * const values, Uint16 length);
 #endif /* ONETOONEI2CDRIVER_H_ */

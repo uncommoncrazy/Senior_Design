@@ -45,6 +45,22 @@ void SetupADCTimer1(void)
     EDIS;
     CpuTimer1.RegsAddr->TCR.bit.TSS=0;
 }
+void SetupADC(void)
+{
+    //Select the channels to convert and end of conversion flag
+    //
+    EALLOW;
+    AdcaRegs.ADCSOC0CTL.bit.CHSEL = 0;  //SOC0 will convert internal
+                                         //connection A0
+    AdcaRegs.ADCSOC0CTL.bit.ACQPS = 100; //sample window is 100
+                                                      //SYSCLK cycles
+    AdcaRegs.ADCSOC0CTL.bit.TRIGSEL = 0; //trigger on cpu1timmer
+   // AdcaRegs.ADCINTSEL1N2.bit.INT1SEL = 0; //end of SOC0 will set INT1 flag
+   // AdcaRegs.ADCINTSEL1N2.bit.INT1E = 1;   //enable INT1 flag
+    AdcaRegs.ADCINTFLGCLR.bit.ADCINT1 = 1; //make sure INT1 flag is cleared
+    EDIS;
+    //CpuTimer1.RegsAddr->TCR.bit.TSS=0;
+}
 float convertADC(Uint16 adcValue)
 {
    float result =  (float)(adcValue)*Resolution;

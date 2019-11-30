@@ -82,7 +82,7 @@ __interrupt void MCBSP_isr(void)
         Uint16 channel1,channel2;
               channel1 = McbspbRegs.DRR1.all;
               channel2 = McbspbRegs.DRR2.all;
-              McbspbRegs.DXR1.all = channel2;
+              McbspbRegs.DXR1.all = channel1;
               McbspbRegs.DXR2.all = channel2;
              // audioIsReady=1;
               // fill audio buffer

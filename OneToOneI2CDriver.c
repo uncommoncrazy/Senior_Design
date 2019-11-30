@@ -187,17 +187,17 @@ static void InitI2CGpio()
 // This will select asynch (no qualification) for the selected pins.
 // Comment out other unwanted lines.
 
-    GpioCtrlRegs.GPDQSEL1.bit.GPIO104 = 3;  // Asynch input GPIO32 (SDAA)
-    GpioCtrlRegs.GPDQSEL1.bit.GPIO105 = 3;  // Asynch input GPIO33 (SCLA)
+    GpioCtrlRegs.GPBQSEL1.bit.GPIO42 = 3;  // Asynch input GPIO32 (SDAA)
+    GpioCtrlRegs.GPBQSEL1.bit.GPIO43 = 3;  // Asynch input GPIO33 (SCLA)
 
 /* Configure SCI pins using GPIO regs*/
 // This specifies which of the possible GPIO pins will be I2C functional pins.
 // Comment out other unwanted lines.
 
-	GpioCtrlRegs.GPDGMUX1.bit.GPIO104 = 0;   // Configure GPIO104 for SDAA operation
-	GpioCtrlRegs.GPDGMUX1.bit.GPIO105 = 0;   // Configure GPIO105 for SCLA operation
-	GpioCtrlRegs.GPDMUX1.bit.GPIO104 = 1;
-	GpioCtrlRegs.GPDMUX1.bit.GPIO105 = 1;
+	GpioCtrlRegs.GPBGMUX1.bit.GPIO42 = 1;   // Configure GPIO104 for SDAA operation
+	GpioCtrlRegs.GPBGMUX1.bit.GPIO43 = 1;   // Configure GPIO105 for SCLA operation
+	GpioCtrlRegs.GPBMUX1.bit.GPIO42 = 2;
+	GpioCtrlRegs.GPBMUX1.bit.GPIO43 = 2;
 
     //EDIS;
 }

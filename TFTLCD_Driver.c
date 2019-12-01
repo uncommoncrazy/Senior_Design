@@ -143,9 +143,10 @@ void drawPixel(int16 x, int16 y, Uint16 color){
     LCD_CS_On;
     setWindow(x,y,TFTWIDTH-1,TFTHEIGHT-1);
     LCD_CS_On;
-    LCD_CS_On;
+ //   LCD_CS_On;
     LCD_CD_Command;
     LCD_Write8(0x2C);
+    LCD_CS_On;
     LCD_CD_Data;
     LCD_Write8(color>>8);
     LCD_Write8(color);

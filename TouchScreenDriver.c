@@ -8,10 +8,11 @@
 Uint16 touches = 9;
 Uint16 touchX[2]={0}, touchY[2]={0}, touchID[2]={0};
 Uint16 TSreadBuff[16]={0}, TSwriteBuff[4]={0};
+TouchPoint TS_Position = {0,0};
 Uint16 TS_init(Uint16 thresh){
     I2C_O2O_Master_Init(FT62XX_ADDR, 200.0,11.0);
     TS_writeRegister8(FT62XX_REG_THRESHHOLD, 40);
-    if(TS_readRegister8(FT62XX_REG_VENDID)!=FT62XX_VENDID) return 0;
+  //  if(TS_readRegister8(FT62XX_REG_VENDID)!=FT62XX_VENDID) return 0;
     Uint16 ID = TS_readRegister8(FT62XX_REG_CHIPID);
     if((ID!=FT6206_CHIPID)&&(ID!=FT6236U_CHIPID)&&(ID!=FT6236_CHIPID)) return 0;
     return 1;
@@ -21,15 +22,14 @@ Uint16 touched(){
     if(t>2) return 0;
     return t;
 }
-TouchPoint getTouchPoint(Uint16 n){
+void getTouchPoint(Uint16 n){
     readData();
-    TouchPoint point = {0,0};
      if ((touches == 0) || (n > 1)) {
-       return point;
+         TS_Position.x=0;
+         TS_Position.y=0;
      } else {
-       point.x=touchX[n];
-       point.y=touchY[n];
-       return point;
+         TS_Position.x=touchX[0];
+         TS_Position.y=touchY[0];
      }
 }
 Uint16 TS_readRegister8(Uint16 r){
@@ -47,18 +47,17 @@ void readData(){
     TSwriteBuff[0]=0;
     I2C_O2O_SendBytes(TSwriteBuff, 1);
     I2C_O2O_ReadBytes(TSreadBuff, 16);
-    touches = TSreadBuff[0x02];
+    touches = TSreadBuff[0];
 
     if ((touches > 2) || (touches == 0)) touches = 0;
 
-    for (Uint16 i=0; i<2; i++) {
-      touchX[i] = TSreadBuff[0x03 + i*6] & 0x0F;
-      touchX[i] <<= 8;
-      touchX[i] |= TSreadBuff[0x04 + i*6];
-      touchY[i] = TSreadBuff[0x05 + i*6] & 0x0F;
-      touchY[i] <<= 8;
-      touchY[i] |= TSreadBuff[0x06 + i*6];
-      touchID[i] = TSreadBuff[0x05 + i*6] >> 4;
-    }
+      touchX[0] = TSreadBuff[0x02 ] ;
+     // touchX[0] <<= 8;
+      //touchX[0] |= TSreadBuff[0x04 ];
+      touchY[0] = TSreadBuff[0x03 ] & 0x0F;
+      touchY[0] <<= 8;
+      touchY[0] |= TSreadBuff[0x04];
+      touchID[0] = TSreadBuff[0x05] >> 4;
+
 
 }

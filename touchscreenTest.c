@@ -54,27 +54,27 @@ int main(void)
     Uint16 color[2];
     color[0] = genColor(0xff, 0xff, 0xff);
     color[1] = genColor(0, 0, 0);
-    Text Result = { .string = "pass", .color =color[0], .x =200, .y=100};
-
+    Text Result = { .string = "pass", .color =color[0], .x =150, .y=100};
     fillScreen(color[1]);
     DELAY_US(10000);
+    TS_init(40);
     while(1){
+        //fillScreen(color[1]);
+        //drawText(Result);
 
        // drawChar('A', color[0], capitalLetter10, 100, 100);
         //test(100, 100, 20)
-       // drawThousandsFloat(3.25,100,100, color[0]);
-       if(testCheck){
-           if(TS_init(40)){
-               Result.string = "pass";
-               testCheck = 0;
-           }else{
-               Result.string = "fail";
-           }
+       // drawThousandsFloat(3.25,10TS_Position0,100, color[0]);
+       if(touched()){
+          getTouchPoint(1);
+          fillScreen(color[1]);
+         drawThousands(TS_Position.x, 100, 0, color[0]);
+         DELAY_US(100);
+         drawThousands(TS_Position.y, 50, 0, color[0]);
        }
-       fillScreen(color[1]);
-       drawText(Result);
+
        //fillScreen(color[1]);
-       DELAY_US(100000);
+       DELAY_US(10000);
 
         //fillRect(50, 100, 20, 20, color[0]);
 //        if(touched()){

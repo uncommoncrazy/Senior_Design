@@ -83,10 +83,9 @@ Uint16 I2C_O2O_SendBytes(Uint16 * const values, Uint16 length)
 	for (Uint16 i = 0; i < length; i++)
 	{
 		// Wait if Transmit is not ready
-		while(!I2caRegs.I2CSTR.bit.XRDY);
-		if(I2caRegs.I2CSTR.bit.NACK)return I2CA_NACK;
+		//if(I2caRegs.I2CSTR.bit.NACK)return I2CA_NACK;
 		I2caRegs.I2CDXR.bit.DATA = values[i];
-
+        while(!I2caRegs.I2CSTR.bit.XRDY);
 		//for(Uint16 j = 0xffff; j>1 ; j--);
         //for(Uint16 j = 0xffff; j>1 ; j--);
         //for(Uint16 j = 0xffff; j>1 ; j--);
@@ -101,17 +100,18 @@ Uint16 I2C_O2O_SendBytes(Uint16 * const values, Uint16 length)
 Uint16 I2C_O2O_ReadBytes(Uint16 * const values, Uint16 length)
 {
     EALLOW;
-    if(I2caRegs.I2CSTR.bit.BB == 1)return I2CA_Busy;
+    while(I2caRegs.I2CSTR.bit.BB);
     I2caRegs.I2CCNT= length;
     // Set to Master, Repeat Mode, FREE, Start
-    I2caRegs.I2CMDR.all = 0x6C20;
-
-    while(I2caRegs.I2CMDR.bit.STT){};
+   do{ I2caRegs.I2CMDR.all = 0x6420;
+       for(Uint16 j = 0x0fff; j>1 ; j--);
+   }while(I2caRegs.I2CMDR.bit.STT&& !I2caRegs.I2CMDR.bit.MST);
     // Write values to I2C
     for (Uint16 i = 0; i < length; i++)
     {
         // Wait if Transmit is not ready
         while(!I2caRegs.I2CSTR.bit.RRDY);
+
         values[i] = I2caRegs.I2CDRR.bit.DATA;
 
       //  for(Uint16 j = 0xffff; j>1 ; j--);
@@ -120,6 +120,7 @@ Uint16 I2C_O2O_ReadBytes(Uint16 * const values, Uint16 length)
 
 
     }
+    I2caRegs.I2CMDR.bit.STP = 1;
     return I2CA_Succesful;
     // Stop Bit
 }

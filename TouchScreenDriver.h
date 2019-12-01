@@ -35,11 +35,12 @@ extern Uint16 TSreadBuff[16], TSwriteBuff[4];
 // calibrated for Adafruit 2.8" ctp screen
 #define FT62XX_DEFAULT_THRESHOLD 128
 typedef struct point_t{
-    int16 x,y;
+    Uint16 x,y;
 } TouchPoint;
+extern TouchPoint TS_Position;
 Uint16 TS_init(Uint16 thresh);
 Uint16 touched();
-TouchPoint getTouchPoint();
+void getTouchPoint();
 Uint16 TS_readRegister8(Uint16 r);
 void TS_writeRegister8(Uint16 r, Uint16 d);
 void readData();

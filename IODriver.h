@@ -23,11 +23,13 @@
 #define     LCD_Read_On     GpioDataRegs.GPBDAT.bit.GPIO33=0
 #define     LCD_CD_Data     GpioDataRegs.GPADAT.bit.GPIO12=1
 #define     LCD_CD_Command  GpioDataRegs.GPADAT.bit.GPIO12=0
-#define     LCD_CS_Off      GpioDataRegs.GPADAT.bit.GPIO15=1
-#define     LCD_CS_On       GpioDataRegs.GPADAT.bit.GPIO15=0
+#define     LCD_CS_Clr      GpioDataRegs.GPADAT.bit.GPIO15=1
+#define     LCD_CS_Set       GpioDataRegs.GPADAT.bit.GPIO15=0
 #define     LCD_Delay       DELAY_US(0.38)
 #define     STROBE_DELAY    DELAY_US(0.01)
 #define     LCD_WR_Strobe   {LCD_Write_On;STROBE_DELAY;LCD_Write_Off;}
+#define     LCD_CS_On       {LCD_CS_Set;STROBE_DELAY;LCD_CS_Set;}
+#define     LCD_CS_Off       {LCD_CS_Clr;STROBE_DELAY;LCD_CS_Clr;}
 #define     LCD_DIR_Write   GpioCtrlRegs.GPADIR.all |= LCDDataPins
 #define     LCD_DIR_RD  GpioCtrlRegs.GPADIR.all &= nLCDDataPins
 

@@ -8,6 +8,7 @@
 #include<F28x_Project.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "AudioEffectsLite.h"
 #include "DisplayLibrary.h"
 #include "InitAIC23.h"
 #include "ADCDriver.h"
@@ -50,7 +51,7 @@ int main(void)
     ERTM;  // Enable Global realtime interrupt DBGM
   //  PieCtrlRegs.PIEIER1.bit.INTx1 = 1;
     SetupADCTimer1();
-    Uint16 lastconversion = 0;
+    float lastconversion = 0.0,difference=0.0;
     Init_LCDPins();
     startLCD();
  //   Uint16 ID=getID();
@@ -58,18 +59,24 @@ int main(void)
     color[0] = genColor(0xff, 0xff, 0xff);
     color[1] = genColor(0, 0, 0);
     Text ADCValue = { .string = "Voltage = ", .color =color[0], .x =200, .y=0};
+    setReverbDecay(0.3);
     while(1){
-        if(audioReady){
+        if(AudioIsReady){
             //drawText(ADCValue);
             //drawThousands(adcSignal>>2,200,100, color[0]);
-           fillScreen(color[1]);
            //adcSignal = AdcaResultRegs.ADCRESULT0;
            conversion=convertADC(adcSignal)/3.3;
-           drawChar('A', color[0], 200, drawFloat(conversion,200, 0, color[0]));
+           difference=conversion-lastconversion;
+           if(difference>0.01 || difference<-0.01){
+               lastconversion = conversion;
+               setReverbDelay(conversion);
+               fillScreen(color[1]);
+               drawChar('s', color[0], 200, drawFloat(conversion,200, 0, color[0]));
+           }
+
             //audioOut = (int16)(((float)((int16)(channel1))*((float)((int16)(channel2)))/32768.0));
-
-
-            audioReady=0;
+           if(BufferFilled&& lastconversion>0.009)  reverb();
+           AudioIsReady=1;
 
             //DELAY_US(100000);
 
@@ -95,10 +102,11 @@ __interrupt void MCBSP_isr(void)
        //       IER &= M_INT6;
               channel1 = McbspbRegs.DRR1.all;
               channel2 = McbspbRegs.DRR2.all;
-              McbspbRegs.DXR1.all = audioOut;
-              McbspbRegs.DXR2.all = audioOut;
-              audioReady=1;
-              audioOut = (int16)(((float)((int16)(channel1))+(float)((int16)(channel2)))*0.5*conversion);
+              McbspbRegs.DXR1.all = AudioOut;
+              McbspbRegs.DXR2.all = AudioOut;
+              AudioIsReady=1;
+              AudioOut = (int16)(((float)((int16)(channel1))+(float)((int16)(channel2)))*0.5);
+              record(AudioOut);
               // fill audio buffer
               PieCtrlRegs.PIEACK.all |= PIEACK_GROUP6;
              // IER|=interruptStore;

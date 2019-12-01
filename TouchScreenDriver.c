@@ -17,6 +17,40 @@ Uint16 TS_init(Uint16 thresh){
     if((ID!=FT6206_CHIPID)&&(ID!=FT6236U_CHIPID)&&(ID!=FT6236_CHIPID)) return 0;
     return 1;
 }
+void I2C_StatusCheck(){
+    switch(I2CA_Status){
+    case I2CA_Succesful:
+        I2CA_BusyCnt = 0;
+        I2CA_StartFailCnt = 0;
+        I2CA_MastFailCnt = 0;
+        break;
+    //catch hanging on busy
+    case I2CA_Busy:
+        if(I2CA_BusyCnt>0xfff&&I2caRegs.I2CMDR.bit.MST){
+            I2caRegs.I2CMDR.bit.STP = 1;
+        }else if(I2CA_BusyCnt>0xfff){
+            I2caRegs.I2CMDR.bit.IRS = 0;
+            I2caRegs.I2CMDR.all=0;
+            TS_init(40);
+        }
+        break;
+    case I2CA_StartFail:
+       if(I2CA_BusyCnt>0xfff&&I2caRegs.I2CMDR.bit.MST)
+       {
+           if(I2CA_StartFailCnt>0xfff&&!I2caRegs.I2CMDR.bit.STP){
+                 I2caRegs.I2CMDR.bit.STP = 1;
+           }
+       }
+       else if(I2CA_StartFailCnt>0xfff){
+          I2caRegs.I2CMDR.bit.IRS = 0;
+          I2caRegs.I2CMDR.all=0;
+          TS_init(40);
+       }
+      break;
+    }
+
+
+}
 Uint16 touched(){
    int t = TS_readRegister8(FT62XX_REG_NUMTOUCHES);
     if(t>2) return 0;

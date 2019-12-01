@@ -16,10 +16,12 @@
 #include "DisplayLibrary.h"
 #define     left        0
 #define     right       1
+
 Uint16  channel = left;
 Uint16  interruptStore=0;
 Uint32  leftChannel = 0;
 Uint32  rightChannel =0;
+__interrupt void cpu_timer0_isr(void);
 __interrupt void adca1_isr(void);
 __interrupt void MSBR_isr(void);
 __interrupt void BUT1_isr(void);
@@ -30,10 +32,19 @@ Uint16 Buttons[3]={0,0,0};
 Uint16  index = 0;
 Uint16 adcSignal = 0;
 Uint16 testCheck = 1;
+Uint16 color[2];
+
 int main(void)
 {
+
     InitSysCtrl();
     InitGpio();
+    Init_LCDPins();
+    startLCD();
+    color[0] = genColor(0xff, 0xff, 0xff);
+    color[1] = genColor(0, 0, 0);
+    fillScreen(color[1]);
+
     EALLOW;
     DINT;
     InitPieCtrl();
@@ -41,21 +52,25 @@ int main(void)
     IFR = 0x0000;
     InitPieVectTable();
     EALLOW;
+    PieVectTable.TIMER0_INT = &cpu_timer0_isr;
 
    //Enable group 1 interrupts
     EDIS;
     InitCpuTimers();
     ConfigCpuTimer(&CpuTimer1, 200, 1000000);
+    ConfigCpuTimer(&CpuTimer0, 200, 100000);
+    //EINT;  // Enable Global interrupt INTM
+    CpuTimer0Regs.TCR.all = 0x4001;
+    IER |= M_INT1;
+    PieCtrlRegs.PIEIER1.bit.INTx7 = 1;
     EINT;  // Enable Global interrupt INTM
-
-    Init_LCDPins();
-    startLCD();
+    ERTM;  // Enable Global realtime interrupt DBGM
+    //Init_LCDPins();
+    //startLCD();
  //   Uint16 ID=getID();
-    Uint16 color[2];
-    color[0] = genColor(0xff, 0xff, 0xff);
-    color[1] = genColor(0, 0, 0);
+
     Text Result = { .string = "pass", .color =color[0], .x =150, .y=100};
-    fillScreen(color[1]);
+
     DELAY_US(10000);
     TS_init(40);
     while(1){
@@ -126,4 +141,14 @@ __interrupt void BUT3_isr(void)
 {
     Buttons[2] = 1;
     PieCtrlRegs.PIEACK.all |= PIEACK_GROUP12;
+}
+__interrupt void cpu_timer0_isr(void)
+{
+   CpuTimer0.InterruptCount++;
+   //fillRect(200, 200, 10, 10, color[CpuTimer0.InterruptCount&1]);
+   I2C_StatusCheck();
+   //
+   // Acknowledge this __interrupt to receive more __interrupts from group 1
+   //
+   PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
 }

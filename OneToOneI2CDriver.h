@@ -13,7 +13,10 @@
 #define I2CA_NACK 0x02
 #define I2CA_MastFail 0x03
 #define I2CA_StartFail 0x04
-
+extern Uint16 I2CA_BusyCnt;
+extern Uint16 I2CA_NACKCnt;
+extern Uint16 I2CA_StartFailCnt;
+extern Uint16 I2CA_MastFailCnt;
 extern Uint16 I2CA_Status;
 extern Uint16 I2CA_Write[10];
 extern Uint16 I2CA_Read[10];

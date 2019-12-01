@@ -39,6 +39,7 @@ typedef struct point_t{
 } TouchPoint;
 extern TouchPoint TS_Position;
 Uint16 TS_init(Uint16 thresh);
+void I2C_StatusCheck();
 Uint16 touched();
 void getTouchPoint();
 Uint16 TS_readRegister8(Uint16 r);

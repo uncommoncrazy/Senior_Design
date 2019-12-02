@@ -29,7 +29,7 @@
 #define FT6206_CHIPID 0x06
 #define FT6236_CHIPID 0x36
 #define FT6236U_CHIPID 0x64
-extern Uint16 touches;
+extern Uint16 touches, screenPressed;
 extern Uint16 touchX[2], touchY[2], touchID[2];
 extern Uint16 TSreadBuff[16], TSwriteBuff[4];
 // calibrated for Adafruit 2.8" ctp screen

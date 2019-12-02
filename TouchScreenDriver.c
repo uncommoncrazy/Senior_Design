@@ -6,16 +6,20 @@
  */
 #include "TouchScreenDriver.h"
 Uint16 touches = 9;
+Uint16 screenPressed = 0;
 Uint16 touchX[2]={0}, touchY[2]={0}, touchID[2]={0};
 Uint16 TSreadBuff[16]={0}, TSwriteBuff[4]={0};
 TouchPoint TS_Position = {0,0};
 Uint16 TS_init(Uint16 thresh){
-    I2C_O2O_Master_Init(FT62XX_ADDR, 200.0,11.0);
+    I2C_O2O_Master_Init(FT62XX_ADDR, 200.0,200.0);
     TS_writeRegister8(FT62XX_REG_THRESHHOLD, 40);
   //  if(TS_readRegister8(FT62XX_REG_VENDID)!=FT62XX_VENDID) return 0;
     Uint16 ID = TS_readRegister8(FT62XX_REG_CHIPID);
     if((ID!=FT6206_CHIPID)&&(ID!=FT6236U_CHIPID)&&(ID!=FT6236_CHIPID)) return 0;
     return 1;
+}
+void TS_reset(){
+    I2C_O2O_Master_Init(FT62XX_ADDR, 200.0,200.0);
 }
 void I2C_StatusCheck(){
     switch(I2CA_Status){
@@ -23,19 +27,20 @@ void I2C_StatusCheck(){
         I2CA_BusyCnt = 0;
         I2CA_StartFailCnt = 0;
         I2CA_MastFailCnt = 0;
+        I2CA_TransmitFailCnt = 0;
+        I2CA_TransmitCnt = 0;
         break;
     //catch hanging on busy
     case I2CA_Busy:
-        if(I2CA_BusyCnt>0xfff&&I2caRegs.I2CMDR.bit.MST){
+        if(I2CA_BusyCnt>0xfff){
             I2caRegs.I2CMDR.bit.STP = 1;
-        }else if(I2CA_BusyCnt>0xfff){
             I2caRegs.I2CMDR.bit.IRS = 0;
             I2caRegs.I2CMDR.all=0;
-            TS_init(40);
+            //TS_init(40);
         }
         break;
     case I2CA_StartFail:
-       if(I2CA_BusyCnt>0xfff&&I2caRegs.I2CMDR.bit.MST)
+       if(I2CA_StartFailCnt>0xfff&&I2caRegs.I2CMDR.bit.MST)
        {
            if(I2CA_StartFailCnt>0xfff&&!I2caRegs.I2CMDR.bit.STP){
                  I2caRegs.I2CMDR.bit.STP = 1;
@@ -44,9 +49,33 @@ void I2C_StatusCheck(){
        else if(I2CA_StartFailCnt>0xfff){
           I2caRegs.I2CMDR.bit.IRS = 0;
           I2caRegs.I2CMDR.all=0;
-          TS_init(40);
+         // I2C_O2O_Master_Init(FT62XX_ADDR, 200.0,200.0);
        }
       break;
+    case I2CA_Transmiting:
+        I2CA_TransmitCnt++;
+        if(I2CA_TransmitCnt>5)I2CA_Status = I2CA_TransmitHang;
+        break;
+    case I2CA_TransmitFail:
+        I2CA_TransmitFailCnt++;
+        if(I2CA_TransmitCnt>5){
+            I2caRegs.I2CMDR.bit.IRS = 0;
+            I2caRegs.I2CMDR.all=0;
+            TS_init(40);
+        }
+        break;
+    case I2CA_Receiving:
+        I2CA_RecieveCnt++;
+        if(I2CA_RecieveCnt>5)I2CA_Status = I2CA_ReceiveHang;
+        break;
+    case I2CA_ReceiveFail:
+        I2CA_RecieveFailCnt++;
+            if(I2CA_RecieveFailCnt>5){
+                I2caRegs.I2CMDR.bit.IRS = 0;
+                I2caRegs.I2CMDR.all=0;
+                TS_init(40);
+            }
+            break;
     }
 
 

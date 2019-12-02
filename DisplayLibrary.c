@@ -5,6 +5,7 @@
  *      Author: Claudine
  */
 #include "DisplayLibrary.h"
+ Uint16  textColor = genColor(0xff, 0xff, 0xff), textFill =0;
 //Font ariel10 = {lowercase10,capitalLetter10, numbers10};
 Uint32 drawChar( char letter, Uint16 color, Uint32 x, Uint32 y){
    // Uint16 dispChar[200]={0};
@@ -74,8 +75,47 @@ Uint32 drawText(Text text){
     Uint16 x = text.x, y=text.y;
     Uint16 index=0;
     while(print[index]){
-        y += drawChar(print[index++],text.color,x,y)+3;
+        y += drawCharQ(print[index++],x,y)+3;
     }
     return y;
+}Uint32 drawCharQ( char letter, Uint32 x, Uint32 y){
+
+    Uint16 strip;
+    Uint16 check;
+    Uint16 checkInit;
+    FontInfo font;
+    int16 offSet=0;
+    if((Uint16)letter>=(Uint16)lowercase10.FirstChar){
+        font=lowercase10;
+        offSet = -2;
+    }else if((Uint16)letter<(Uint16)capitalLetter10.FirstChar){
+        font=numbers10;
+    }else{
+        font=capitalLetter10;
+        offSet = -1;
+    }
+    Uint16 letterIndex = (Uint16)letter - (Uint16)font.FirstChar;
+    CharInfo character =font.Descrpitors[letterIndex];
+    Uint16 dispChar[200]={0};
+    if(character.width<=8){
+        checkInit = 0x80;
+    }else{
+        checkInit = 0x8000;
+    }
+    // draw char into array
+    for(Uint16 row =0; row<character.hight; row++){
+        check = checkInit;
+        strip =font.Bitmaps[character.offset+row];
+        for(Uint16 col =0; col<character.width+5; col++){
+            dispChar[((character.hight-1)-row)+col*character.hight] = (check&strip)?textColor:textFill;
+               check = check>>1;
+
+        }
+    }
+    LCD_CS_On;
+    setWindow(x+offSet, y, x+character.hight-1+offSet, y+character.width-1+10);
+    pushColors(dispChar, character.hight*(character.width+5));
+
+    return character.width;
 }
 //Text createText(char* string, Uint16* color, FontInfo font);

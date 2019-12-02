@@ -10,6 +10,7 @@
 #define TFTWIDTH        240
 #define TFTHEIGHT       320
 #define TFTLCD_DELAY    0xff
+
 void LCD_init(){
  Init_LCDPins();
  LCD_CS_Off;
@@ -230,9 +231,9 @@ void setRotation(Uint16 rotation){
      setWindow(0, 0, TFTWIDTH - 1, TFTHEIGHT - 1); // CS_IDLE happens
 }
 
-Uint16 genColor(Uint16 r, Uint16 g, Uint16 b){
-    return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
-}
+//Uint16 genColor(Uint16 r, Uint16 g, Uint16 b){
+//    return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
+//}
 void writeCommand(Uint16 d){
 LCD_CS_On;
 LCD_CD_Command;

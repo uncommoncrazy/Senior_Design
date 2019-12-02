@@ -51,7 +51,7 @@ int main(void)
     startLCD();
  //   Uint16 ID=getID();
     Uint16 color[2];
-    color[0] = genColor(0xff, 0xff, 0xff);
+    textColor = genColor(0xff, 0xff, 0xff);
     color[1] = genColor(0, 0, 0);
     Text hello = { .string = "hell0o thAere my name is theador", .color =color[0], .x =200, .y=100};
 
@@ -59,7 +59,7 @@ int main(void)
     while(1){
 
        // drawChar('A', color[0], capitalLetter10, 100, 100);
-        //test(100, 100, 20)
+       // test(100, 100, 20)
        // drawThousandsFloat(3.25,100,100, color[0]);
 
        drawText(hello);

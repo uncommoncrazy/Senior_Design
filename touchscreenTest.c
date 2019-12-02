@@ -80,16 +80,15 @@ int main(void)
        // drawChar('A', color[0], capitalLetter10, 100, 100);
         //test(100, 100, 20)
        // drawThousandsFloat(3.25,10TS_Position0,100, color[0]);
-       if(touched()){
-          getTouchPoint(1);
-          fillScreen(color[1]);
+       if( touched()){
+         getTouchPoint(1);
          drawThousands(TS_Position.x, 100, 0, color[0]);
-         DELAY_US(100);
+         //DELAY_US(100);
          drawThousands(TS_Position.y, 50, 0, color[0]);
        }
 
        //fillScreen(color[1]);
-       DELAY_US(10000);
+       //DELAY_US(100000);
 
         //fillRect(50, 100, 20, 20, color[0]);
 //        if(touched()){
@@ -144,10 +143,12 @@ __interrupt void BUT3_isr(void)
 }
 __interrupt void cpu_timer0_isr(void)
 {
+   EALLOW;
    CpuTimer0.InterruptCount++;
    //fillRect(200, 200, 10, 10, color[CpuTimer0.InterruptCount&1]);
+
    I2C_StatusCheck();
-   //
+
    // Acknowledge this __interrupt to receive more __interrupts from group 1
    //
    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;

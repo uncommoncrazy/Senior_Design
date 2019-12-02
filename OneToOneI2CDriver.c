@@ -10,6 +10,11 @@
 Uint16 I2CA_BusyCnt = 0;
 Uint16 I2CA_StartFailCnt = 0;
 Uint16 I2CA_MastFailCnt = 0;
+Uint16 I2CA_TransmitCnt = 0;
+Uint16 I2CA_TransmitFailCnt = 0;
+Uint16 I2CA_RecieveCnt = 0;
+Uint16 I2CA_RecieveFailCnt = 0;
+
 Uint16 I2CA_Status = 0;
 Uint16 I2CA_Write[10]={0};
 Uint16 I2CA_Read[10]={0};
@@ -96,7 +101,14 @@ Uint16 I2C_O2O_SendBytes(Uint16 * const values, Uint16 length)
 	for (Uint16 i = 0; i < length; i++)
 	{
 		I2caRegs.I2CDXR.bit.DATA = values[i];
-        while(!I2caRegs.I2CSTR.bit.XRDY);
+        while(!I2caRegs.I2CSTR.bit.XRDY){
+            if( I2CA_Status == I2CA_TransmitHang){
+                I2caRegs.I2CMDR.bit.STP = 1;
+                return I2CA_TransmitFail;
+            }else{
+                I2CA_Status = I2CA_Transmiting;
+            }
+        };
 
 
 
@@ -109,21 +121,37 @@ Uint16 I2C_O2O_SendBytes(Uint16 * const values, Uint16 length)
 Uint16 I2C_O2O_ReadBytes(Uint16 * const values, Uint16 length)
 {
     EALLOW;
-    if(I2caRegs.I2CSTR.bit.BB == 1)return I2CA_Busy;
+    if(I2caRegs.I2CSTR.bit.BB == 1){
+          I2CA_BusyCnt++;
+          return I2CA_Busy;
+      }
+
+
     //while(I2caRegs.I2CSTR.bit.BB);
     I2caRegs.I2CCNT= length;
     // Set to Master, Repeat Mode, FREE, Start
-   do{ I2caRegs.I2CMDR.all = 0x6420;
-       for(Uint16 j = 0x0fff; j>1 ; j--);
-   }while(I2caRegs.I2CMDR.bit.STT&& !I2caRegs.I2CMDR.bit.MST);
+   I2caRegs.I2CMDR.all = 0x6420;
+   for(Uint16 j = 0x0fff; j>1 ; j--);
+       if(!I2caRegs.I2CMDR.bit.MST){
+           I2CA_MastFailCnt++;
+           return I2CA_MastFail;
+       }
+       if(I2caRegs.I2CMDR.bit.STT){
+           I2CA_StartFailCnt++;
+           return I2CA_StartFail;
+       }
+
+
     // Write values to I2C
     for (Uint16 i = 0; i < length; i++)
     {
         // Wait if Transmit is not ready
         while(!I2caRegs.I2CSTR.bit.RRDY){
-            if(!I2caRegs.I2CMDR.bit.MST){
-                    I2CA_MastFailCnt++;
-                    return I2CA_MastFail;
+            if( I2CA_Status == I2CA_ReceiveHang){
+                I2caRegs.I2CMDR.bit.STP = 1;
+                return I2CA_ReceiveFail;
+            }else{
+                I2CA_Status = I2CA_Receiving;
             }
         };
 

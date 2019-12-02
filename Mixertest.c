@@ -56,7 +56,7 @@ int main(void)
     startLCD();
  //   Uint16 ID=getID();
     Uint16 color[2];
-    color[0] = genColor(0xff, 0xff, 0xff);
+    textColor = genColor(0xff, 0xff, 0xff);
     color[1] = genColor(0, 0, 0);
     Text ADCValue = { .string = "Voltage = ", .color =color[0], .x =200, .y=0};
     setReverbDecay(0.3);
@@ -70,8 +70,8 @@ int main(void)
            if(difference>0.01 || difference<-0.01){
                lastconversion = conversion;
                setReverbDelay(conversion);
-               fillScreen(color[1]);
-               drawChar('s', color[0], 200, drawFloat(conversion,200, 0, color[0]));
+               //fillScreen(color[1]);
+               drawCharQ('s', 200, drawFloat(conversion,200, 50, color[0]));
            }
 
             //audioOut = (int16)(((float)((int16)(channel1))*((float)((int16)(channel2)))/32768.0));

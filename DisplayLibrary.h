@@ -19,11 +19,14 @@ typedef struct text_t{
     Uint16 color;
     Uint32 x,y;
 }Text;
+extern Uint16  textColor, textFill;
 Uint32 drawFloat(float decimal,Uint32 x,Uint32 y,Uint16 color);
 Uint32 drawThousands(Uint16 decimal,Uint32 x,Uint32 y,Uint16 color);
 //extern  Font ariel10;
 Uint32 drawChar( char letter, Uint16 color, Uint32 x, Uint32 y);
 Uint32 drawText(Text text);
 void test(Uint32 x, Uint32 y , Uint16 side);
+Uint32 drawCharQ( char letter, Uint32 x, Uint32 y);
+
 //Text createText(char* string, Uint16* color, FontInfo font);
 #endif /* DISPLAYLIBRARY_H_ */

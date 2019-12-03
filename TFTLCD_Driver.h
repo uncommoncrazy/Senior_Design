@@ -9,8 +9,8 @@
 #define TFTLCD_DRIVER_H_
 #include "IODriver.h"
 #define genColor(r, g, b) ( \
-                        ((0xff & r) << 8) | \
-                        ((0xff & g) << 3) | \
+                        ((0xf8 & r) << 8) | \
+                        ((0xfc & g) << 3) | \
                         (b >> 3) \
                      )
 void startLCD();

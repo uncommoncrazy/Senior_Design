@@ -6,12 +6,14 @@
  */
 #include "TouchScreenDriver.h"
 Uint16 touches = 9;
-Uint16 screenPressed = 0;
 Uint16 touchX[2]={0}, touchY[2]={0}, touchID[2]={0};
 Uint16 TSreadBuff[16]={0}, TSwriteBuff[4]={0};
 TouchPoint TS_Position = {0,0};
+Uint16 TS_Status=0,TS_holdtime=0,TS_Check=0;
+long TS_counter=0;
+TouchPoint LastPressedInfo[2]= {{0,0},{0,0}};
 Uint16 TS_init(Uint16 thresh){
-    I2C_O2O_Master_Init(FT62XX_ADDR, 200.0,200.0);
+    I2C_O2O_Master_Init(FT62XX_ADDR, 200.0,600.0);
     TS_writeRegister8(FT62XX_REG_THRESHHOLD, 40);
   //  if(TS_readRegister8(FT62XX_REG_VENDID)!=FT62XX_VENDID) return 0;
     Uint16 ID = TS_readRegister8(FT62XX_REG_CHIPID);
@@ -84,6 +86,33 @@ Uint16 touched(){
    int t = TS_readRegister8(FT62XX_REG_NUMTOUCHES);
     if(t>2) return 0;
     return t;
+}
+void TS_checkInteraction(){
+    if(TS_Check){
+         if( touched()){
+             getTouchPoint(1);
+            if(!(TS_Status&1)){
+                LastPressedInfo[0].x =TS_Position.x;
+                LastPressedInfo[0].y =TS_Position.y;
+                TS_Status|=1;
+            }
+         }else{
+             if(TS_Status&1){ TS_holdtime=TS_counter;
+                 TS_Status=2;
+             }
+             LastPressedInfo[1].x =TS_Position.x;
+             LastPressedInfo[1].y =TS_Position.y;
+         }
+         switch(TS_Status&1){
+             case 0:
+                 TS_counter = 0;
+                 break;
+             case 1:
+                 TS_counter++;
+                 break;
+         }
+     }
+    TS_Check = 0;
 }
 void getTouchPoint(Uint16 n){
     readData();

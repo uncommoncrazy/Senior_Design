@@ -9,13 +9,14 @@
 #include<F28x_Project.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "FPU.h"
 #include "IODriver.h"
 #include "TFTLCD_Driver.h"
 #include "TouchScreenDriver.h"
 #include "DisplayLibrary.h"
 #define     left        0
 #define     right       1
+
 
 Uint16  channel = left;
 Uint16  interruptStore=0;
@@ -34,6 +35,7 @@ Uint16 adcSignal = 0;
 Uint16 testCheck = 1;
 Uint16 color[2];
 
+Uint16 temp=0;
 int main(void)
 {
 
@@ -58,7 +60,7 @@ int main(void)
     EDIS;
     InitCpuTimers();
     ConfigCpuTimer(&CpuTimer1, 200, 1000000);
-    ConfigCpuTimer(&CpuTimer0, 200, 100000);
+    ConfigCpuTimer(&CpuTimer0, 200, 50000);
     //EINT;  // Enable Global interrupt INTM
     CpuTimer0Regs.TCR.all = 0x4001;
     IER |= M_INT1;
@@ -80,12 +82,35 @@ int main(void)
        // drawChar('A', color[0], capitalLetter10, 100, 100);
         //test(100, 100, 20)
        // drawThousandsFloat(3.25,10TS_Position0,100, color[0]);
-       if( touched()){
-         getTouchPoint(1);
-         drawThousands(TS_Position.x, 100, 0, color[0]);
-         //DELAY_US(100);
-         drawThousands(TS_Position.y, 50, 0, color[0]);
-       }
+       TS_checkInteraction();
+       ltoa(TS_Position.x, string);
+       printD(string, 100, 0);
+       memset_fast(string,0,50);
+       //DELAY_US(100);
+       ltoa(TS_Position.y, string);
+       printD(string, 50, 0);
+       memset_fast(string,0,50);
+       temp= printD("Pressed",110,50) +10;
+       ltoa( LastPressedInfo[0].x, string);
+       printD(string, 100,  50);
+       memset_fast(string,0,50);
+       DELAY_US(100);
+       ltoa( LastPressedInfo[0].y, string);
+       printD(string, 90, 50);
+       memset_fast(string,0,50);
+
+       ltoa( LastPressedInfo[1].x, string);
+       printD(string, 100, temp);
+       memset_fast(string,0,50);
+       ltoa( LastPressedInfo[1].y, string);
+       printD(string, 90, temp);
+       memset_fast(string,0,50);
+       temp= printD("Let go",110,temp) +10;
+
+       printD("Time Held",110,temp);
+       ltoa(TS_holdtime, string);
+       printD(string, 90, temp);
+       memset_fast(string,0,50);
 
        //fillScreen(color[1]);
        //DELAY_US(100000);
@@ -146,7 +171,7 @@ __interrupt void cpu_timer0_isr(void)
    EALLOW;
    CpuTimer0.InterruptCount++;
    //fillRect(200, 200, 10, 10, color[CpuTimer0.InterruptCount&1]);
-
+   TS_Check=1;
    I2C_StatusCheck();
 
    // Acknowledge this __interrupt to receive more __interrupts from group 1

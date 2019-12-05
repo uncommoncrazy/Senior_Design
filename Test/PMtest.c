@@ -13,7 +13,7 @@
 #include "InitAIC23.h"
 #include "ADCDriver.h"
 __interrupt void adca1_isr(void);
-Uint16 channel1,channel2;
+//Uint16 channel1,channel2;
 int16 audioOut,audioReady;
 Uint16 adcSignal = 0;
 __interrupt void MCBSP_isr(void);
@@ -75,8 +75,8 @@ int main(void)
            //}
 
             //audioOut = (int16)(((float)((int16)(channel1))*((float)((int16)(channel2)))/32768.0));
-           if(BufferFilled)                PhaseModulation();
-
+           //if(BufferFilled)                PhaseModulation();
+           AmpModulation();
            AudioIsReady=0;
 
             //DELAY_US(100000);

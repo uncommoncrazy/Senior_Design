@@ -51,7 +51,36 @@ int main(void)
          .string = "Test",
          .state = Button_Off
     };
-
+    Button ReverbButton = {
+             .color={ColorButtonOff,ColorButtonOn},
+             .colorText={ColorText,ColorText},
+             .height=80,
+             .width = 20,
+             .x = 100,
+             .y = 0,
+             .string = "Reverb",
+             .state = Button_Off
+        };
+    Button FMButton = {
+             .color={ColorButtonOff,ColorButtonOn},
+             .colorText={ColorText,ColorText},
+             .height=80,
+             .width = 20,
+             .x = 100,
+             .y = 100,
+             .string = "FM Mod",
+             .state = Button_Off
+        };
+    Button AMButton = {
+               .color={ColorButtonOff,ColorButtonOn},
+               .colorText={ColorText,ColorText},
+               .height=80,
+               .width = 20,
+               .x = 100,
+               .y = 200,
+               .string = "AM Mod",
+               .state = Button_Off
+          };
     InitSysCtrl();
     InitGpio();
     Init_LCDPins();
@@ -89,7 +118,7 @@ int main(void)
     DELAY_US(10000);
     TS_init(40);
 
-    drawButton(testButton);
+  //  drawButton(testButton, testButton.state);
     while(1){
         //fillScreen(color[1]);
         //drawText(Result);
@@ -98,7 +127,12 @@ int main(void)
         //test(100, 100, 20)
        // drawThousandsFloat(3.25,10TS_Position0,100, color[0]);
        TS_checkInteraction();
-       checkButton(&testButton);
+       checkButton(&ReverbButton);
+       drawButton(ReverbButton, ReverbButton.state);
+       checkButton(&FMButton);
+       drawButton(FMButton, FMButton.state);
+       checkButton(&AMButton);
+       drawButton(AMButton, AMButton.state);
 
        //fillScreen(color[1]);
        //DELAY_US(100000);

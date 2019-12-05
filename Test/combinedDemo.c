@@ -20,7 +20,6 @@
 #define     left        0
 #define     right       1
 
-Uint16 channel1,channel2;
 
 Uint16  channel = left;
 Uint16  interruptStore=0;
@@ -128,7 +127,7 @@ int main(void)
        TS_checkInteraction();
        checkButtonPress(&testButton);
        ADSRGate = 0;
-      // ADSRGate = testButton.state>>1;
+       ADSRGate = testButton.state>>1;
        if(DrawCheck){
        //    ADSRGate = 1;
            drawButton(testButton, testButton.state>>1);

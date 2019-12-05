@@ -31,10 +31,7 @@ PAGE 1 :
    RAMGS5      : origin = 0x011000, length = 0x001000
    RAMGS6      : origin = 0x012000, length = 0x001000
    RAMGS7      : origin = 0x013000, length = 0x001000*/
-   RAMGS8      : origin = 0x014000, length = 0x001000
-   RAMGS9      : origin = 0x015000, length = 0x001000
-   RAMGS10     : origin = 0x016000, length = 0x001000
-   RAMGS11     : origin = 0x017000, length = 0x001000
+   RAMGS8to11  : origin = 0x014000, length = 0x004000
    RAMGS12     : origin = 0x018000, length = 0x001000
    RAMGS13     : origin = 0x019000, length = 0x001000
    RAMGS14     : origin = 0x01A000, length = 0x001000
@@ -67,7 +64,7 @@ SECTIONS
    .ebss            : > RAMGS14,    		PAGE = 1
    //.econst          : > RAMGS15,    	PAGE = 1
    DelayLine		: > RAMGS0to7, PAGE = 1
-   Reverb		: > RAMGS8,   PAGE = 1
+   Reverb		: > RAMGS8to11,   PAGE = 1
  //  .esysmem         : > RAMGS6,    	PAGE = 1
 //   Filter_RegsFile  : > RAMGS0,	   	PAGE = 1
 //   ramgs0           : > RAMGS0,    	PAGE = 1

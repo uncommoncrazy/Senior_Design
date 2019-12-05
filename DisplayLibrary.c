@@ -87,6 +87,42 @@ Uint32 printD(char * string,Uint32 x, Uint32 y){
 
     return y;
 }
+Uint32 stringLength(char * string){
+    Uint16 index=0;
+    Uint16 y =0;
+    while(string[index]) y += charLength(string[index++])+3;
+
+    return y;
+}
+Uint32 charLength( char letter){
+
+    Uint16 strip;
+    Uint16 check;
+    Uint16 checkInit;
+    FontInfo font;
+    int16 offSet=0;
+    if((Uint16)letter>=(Uint16)lowercase10.FirstChar){
+        font=lowercase10;
+        offSet = -2;
+    }else if((Uint16)letter<(Uint16)capitalLetter10.FirstChar){
+        font=numbers10;
+    }else{
+        font=capitalLetter10;
+        offSet = -1;
+    }
+    Uint16 letterIndex = (Uint16)letter - (Uint16)font.FirstChar;
+    CharInfo character =font.Descrpitors[letterIndex];
+    Uint16 dispChar[200]={0};
+    if(character.width<=8){
+        checkInit = 0x80;
+    }else{
+        checkInit = 0x8000;
+    }
+    // draw char into array
+
+
+    return character.width;
+}
 Uint32 drawCharQ( char letter, Uint32 x, Uint32 y){
 
     Uint16 strip;
@@ -127,9 +163,18 @@ Uint32 drawCharQ( char letter, Uint32 x, Uint32 y){
 
     return character.width;
 }
+void drawBar(float value,Uint16 x, Uint16 y, Uint16 height, Uint16 width, Uint16 color ){
+    Uint16 position =(Uint16)(width*value);
+    fillRect(x, position+y, height ,width - position , 0);
+    fillRect(x, y, height, position, color);
+
+
+
+}
 void drawButton(Button button, Uint16 state){
             Uint32 x = button.x, y = button.y,width = button.width,height = button.height;
-            Uint32 textX=x+(width>>1), textY=y+(height>>1);
+            Uint32 length = stringLength(button.string)/2;
+            Uint32 textX=x+(width>>1)-5, textY=y+(height>>1)-length;
             fillRect(x, y, width, height, button.color[state]);
             if(button.string){
                 textFill = button.color[state];

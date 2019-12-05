@@ -13,7 +13,7 @@
 #include "InitAIC23.h"
 #include "ADCDriver.h"
 __interrupt void adca1_isr(void);
-Uint16 channel1,channel2;
+
 int16 audioOut,audioReady;
 Uint16 adcSignal = 0;
 __interrupt void MCBSP_isr(void);
@@ -30,7 +30,7 @@ int main(void)
 
     InitAIC23();
     Init_ADC();
-
+    masterVolume =1.0;
     EALLOW;
     DINT;
     InitPieCtrl();
@@ -74,8 +74,8 @@ int main(void)
                drawCharQ('s', 200, drawFloat(conversion,200, 50, color[0]));
            }
 
-            //audioOut = (int16)(((float)((int16)(channel1))*((float)((int16)(channel2)))/32768.0));
-           if(BufferFilled&& lastconversion>0.009)  reverb();
+           //audioOut = (int16)(((float)((int16)(channel1))*((float)((int16)(channel2)))/32768.0));
+           if(ReverbFilled && lastconversion > 0.009)  reverb();
            AudioIsReady=0;
 
             //DELAY_US(100000);

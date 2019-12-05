@@ -20,7 +20,6 @@
 #define     left        0
 #define     right       1
 
-Uint16 channel1,channel2;
 
 Uint16  channel = left;
 Uint16  interruptStore=0;
@@ -52,17 +51,11 @@ __interrupt void MCBSP_isr(void);
 int main(void)
 
 {
-    Button testButton = {
-         .color={ColorButtonOff,ColorButtonOn},
-         .colorText={ColorText,ColorText},
-         .height=80,
-         .width = 50,
-         .x = 100,
-         .y = 150,
-         .string = "ADSR",
-         .state = Button_Off
-    };
+    Uint16 darkGreen = genColor(0,100,0);
+    Uint16 yellow= genColor(0xff,0xff,0);
+    Uint16 magenta= genColor(0xff,0,0xff);
 
+    masterVolume=1.0;
     InitSysCtrl();
     InitGpio();
 
@@ -91,8 +84,8 @@ int main(void)
    //Enable group 1 interrupts
     EDIS;
     InitCpuTimers();
-    ConfigCpuTimer(&CpuTimer1, 200, 10000);
-    ConfigCpuTimer(&CpuTimer0, 200, 100000);
+    ConfigCpuTimer(&CpuTimer1, 200, 100000);
+    ConfigCpuTimer(&CpuTimer0, 200, 50000);
     //EINT;  // Enable Global interrupt INTM
     CpuTimer0Regs.TCR.all = 0x4001;
     PieCtrlRegs.PIEIER6.bit.INTx7 = 1;
@@ -114,6 +107,63 @@ int main(void)
     TS_init(40);
     Init_ADSRPins();
     Uint16 lastState;
+    Button ADSRButton = {
+           .color={ColorButtonOff,ColorButtonOn},
+           .colorText={ColorText,ColorText},
+           .height=80,
+           .width = 50,
+           .x = 170,
+           .y = 320-80,
+           .string = "ADSR",
+           .state = Button_Off
+      };
+    Button ReverbButton = {
+               .color={ColorButtonOff,ColorButtonOn},
+               .colorText={ColorText,ColorText},
+               .height=80,
+               .width = 20,
+               .x = 50,
+               .y = 200,
+               .string = "Reverb",
+               .state = Button_Off
+          };
+    Button VolButton = {
+                  .color={magenta,darkGreen},
+                  .colorText={darkGreen,yellow},
+                  .height=80,
+                  .width = 20,
+                  .x = 220,
+                  .y = 0,
+                  .string = "Volume",
+                  .state = Button_Off
+     };
+      Button FMButton = {
+               .color={ColorButtonOff,ColorButtonOn},
+               .colorText={ColorText,ColorText},
+               .height=80,
+               .width = 20,
+               .x = 100,
+               .y = 60,
+               .string = "FM Mod",
+               .state = Button_Off
+          };
+      Button AMButton = {
+                 .color={ColorButtonOff,ColorButtonOn},
+                 .colorText={ColorText,ColorText},
+                 .height=80,
+                 .width = 20,
+                 .x = 100,
+                 .y = 180,
+                 .string = "AM Mod",
+                 .state = Button_Off
+            };
+      //drawButton(ReverbButton, 0);
+      drawButton(FMButton, 0);
+      drawButton(AMButton, 0);
+//      drawButton(ReverbButton, 0);
+      drawButton(VolButton, 0);
+      setReverbDecay(0.3);
+
     //drawButton(testButton,te);
     while(1){
         //fillScreen(color[1]);
@@ -123,30 +173,58 @@ int main(void)
         //test(100, 100, 20)
        // drawThousandsFloat(3.25,10TS_Position0,100, color[0]);
        TS_checkInteraction();
-       checkButtonPress(&testButton);
-       ADSRGate = testButton.state>>1;
+       checkButtonPress(&ADSRButton);
+       ADSRGate = ADSRButton.state>>1;
+
+      // checkButtonPress(&ReverbButton);
+       checkButtonPress(&VolButton);
+
+       checkButton(&FMButton);
+       if(FMButton.state)
+                  AMButton.state=0;
+       checkButton(&AMButton);
+       if(AMButton.state)
+           FMButton.state=0;
+       //ADSRGate = testButton.state>>1;
        if(DrawCheck){
-           drawButton(testButton, testButton.state>>1);
+           //drawButton(ReverbButton, ReverbButton.state);
+           drawButton(ADSRButton, ADSRButton.state>>1);
+           drawButton(VolButton, VolButton.state>>1);
+           //drawButton(ReverbButton, ReverbButton.state>>1);
+           drawButton(FMButton, FMButton.state&1);
+
+           drawButton(AMButton, AMButton.state&1);
            DrawCheck=0;
+
 
        }
        if(AudioIsReady){
                    //drawText(ADCValue);
                    //drawThousands(adcSignal>>2,200,100, color[0]);
                   //adcSignal = AdcaResultRegs.ADCRESULT0;
-                  conversion=convertADC(adcSignal)/3.3;
+                  conversion=(convertADC(adcSignal)/3.3)*3.0;
                   difference=conversion-lastconversion;
                   if(difference>0.01 || difference<-0.01){
                       lastconversion = conversion;
-                      setReverbDelay(conversion);
+
+                  if(VolButton.state>>1)
+                      masterVolume = conversion;
+
                       //fillScreen(color[1]);
                       textFill = 0;
-                      drawCharQ('s', 200, drawFloat(conversion,200, 50, color[0]));
+                      drawBar(masterVolume/3.0, 220, 80, 20, 240, genColor(0xf0,0xf0,0));
+                      //drawCharQ('A', 200, drawFloat(conversion,200, 50, color[0]));
                   }
 
                    //audioOut = (int16)(((float)((int16)(channel1))*((float)((int16)(channel2)))/32768.0));
-                  if(BufferFilled&& lastconversion>0.009)  reverb();
+
+                  if(BufferFilled&& (FMButton.state&1))  PhaseModulation();
+                  if(AMButton.state&1)AmpModulation();
                   AudioIsReady=0;
+//                  if(ReverbButton.state>>1){
+//                        setReverbDelay(conversion);
+//                        reverb();
+//                  }
        }
 
 //              temp= printD("Pressed",110,0) +10;
@@ -184,56 +262,18 @@ int main(void)
     }
 }
 
-//__interrupt void MSBR_isr(void)
-//{
-//        // right channel transmission
-//       interruptStore=IER;
-//       IER &= M_INT6;
-//       if(channel)
-//       {
-//           rightChannel = (Uint32)(McbspbRegs.DRR1.all);
-//           rightChannel |= ((Uint32)(McbspbRegs.DRR2.all))<<16;
-//           McbspbRegs.DXR1.all =0;
-//           McbspbRegs.DXR2.all =(Uint16) ((rightChannel>>16)&0xffff);
-//           channel = left;
-//       }
-//       // left channel transmission
-//       else
-//       {
-//           McbspbRegs.DXR1.all = McbspbRegs.DRR1.all;
-//           McbspbRegs.DXR2.all = McbspbRegs.DRR2.all;
-//           channel = right;
-//       }
-//       PieCtrlRegs.PIEACK.all |= PIEACK_GROUP6;
-//       IER|=interruptStore;
-//}
-__interrupt void BUT1_isr(void)
-{
-    Buttons[0] = 1;
-    PieCtrlRegs.PIEACK.all |= PIEACK_GROUP1;
-}
-__interrupt void BUT2_isr(void)
-{
-    Buttons[1] = 1;
-    PieCtrlRegs.PIEACK.all |= PIEACK_GROUP1;
 
-}
-__interrupt void BUT3_isr(void)
-{
-    Buttons[2] = 1;
-    PieCtrlRegs.PIEACK.all |= PIEACK_GROUP12;
-}
 __interrupt void cpu_timer0_isr(void)
 {
    EALLOW;
    CpuTimer0.InterruptCount++;
    //fillRect(200, 200, 10, 10, color[CpuTimer0.InterruptCount&1]);
-
-   if(CpuTimer0.InterruptCount&1){
-       TS_Check=1;
-       I2C_StatusCheck();
+   TS_Check=1;
+          I2C_StatusCheck();
+   if(!(CpuTimer0.InterruptCount&0X3) ){
+       DrawCheck=1;
    }
-   DrawCheck=1;
+
 
 
    // Acknowledge this __interrupt to receive more __interrupts from group 1
@@ -251,8 +291,8 @@ __interrupt void MCBSP_isr(void)
    //       IER &= M_INT6;
           channel1 = McbspbRegs.DRR1.all;
           channel2 = McbspbRegs.DRR2.all;
-          McbspbRegs.DXR1.all = AudioOut;
-          McbspbRegs.DXR2.all = AudioOut;
+          McbspbRegs.DXR1.all = (int16)(AudioOut*masterVolume);
+          McbspbRegs.DXR2.all = (int16)(AudioOut*masterVolume);
           AudioIsReady=1;
           AudioOut = (int16)(((float)((int16)(channel1))+(float)((int16)(channel2)))*0.5);
           record(AudioOut);

@@ -10,7 +10,8 @@
 #include<F28x_Project.h>
 
 #define AudioBuffSize 0x8000
-#define PhaseOffset 0x4000
+#define PhaseOffset  0x4000
+#define ReverbSize 0x4000
 #define Audio_Out 0
 #define Audio_Left 1
 #define Audio_Right 2
@@ -30,11 +31,11 @@ extern Uint16 AudioBuffer[AudioBuffSize];
 #else
 #pragma DATA_SECTION(ReverbBuffer,"Reverb")
 #endif
-extern Uint16 ReverbBuffer[0x1000];
-extern Uint16 AudioIsReady,ReverbDelay,BufferIndex,AudioBufferCtrl,BufferFilled,LeftIn,RightIn;
+extern Uint16 ReverbBuffer[ReverbSize];
+extern Uint16 AudioIsReady,ReverbDelay,BufferIndex,AudioBufferCtrl,ReverbFilled,BufferFilled,LeftIn,RightIn;
 extern int16  AudioOut;
 extern Uint16 channel1,channel2;
-extern float ReverbDecay,a;
+extern float ReverbDecay,a,masterVolume;
 void setReverbDelay(float delay);
 void setReverbDecay(float decay);
 void reverb();

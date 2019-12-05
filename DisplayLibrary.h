@@ -31,8 +31,11 @@ typedef struct button_t{
 }Button;
 extern char string[50];
 extern Uint16  textColor, textFill;
+Uint32 charLength( char letter);
+Uint32 stringLength(char * string);
 Uint32 drawFloat(float decimal,Uint32 x,Uint32 y,Uint16 color);
 Uint32 drawThousands(Uint16 decimal,Uint32 x,Uint32 y,Uint16 color);
+void drawBar(float value,Uint16 x, Uint16 y, Uint16 height, Uint16 width, Uint16 color );
 void drawButton(Button button, Uint16 state);
 void checkButton(Button* button);
 

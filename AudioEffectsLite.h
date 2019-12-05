@@ -13,6 +13,7 @@
 #define Audio_Out 0
 #define Audio_Left 1
 #define Audio_Right 2
+#define ADSRGate    GpioDataRegs.GPADAT.bit.GPIO25
 
 #ifdef __cplusplus
 #pragma DATA_SECTION("DelayLine")

@@ -69,7 +69,10 @@ Uint16 getSwitches(){
     Uint16 switches=GpioDataRegs.GPADAT.all&SwitchPins;
     return switches >>8;
 }
-
+void Init_ADSRPins(){
+    GpioCtrlRegs.GPADIR.bit.GPIO25 = 1;
+    GpioDataRegs.GPADAT.bit.GPIO25 = 0;
+}
 void Init_LCDPins(){
    EALLOW;
    GpioCtrlRegs.GPADIR.all |= LCDDataPins;

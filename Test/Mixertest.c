@@ -76,7 +76,7 @@ int main(void)
 
             //audioOut = (int16)(((float)((int16)(channel1))*((float)((int16)(channel2)))/32768.0));
            if(BufferFilled&& lastconversion>0.009)  reverb();
-           AudioIsReady=1;
+           AudioIsReady=0;
 
             //DELAY_US(100000);
 

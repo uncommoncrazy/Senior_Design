@@ -56,11 +56,11 @@ void I2C_StatusCheck(){
       break;
     case I2CA_Transmiting:
         I2CA_TransmitCnt++;
-        if(I2CA_TransmitCnt>5)I2CA_Status = I2CA_TransmitHang;
+        if(I2CA_TransmitCnt>2)I2CA_Status = I2CA_TransmitHang;
         break;
     case I2CA_TransmitFail:
         I2CA_TransmitFailCnt++;
-        if(I2CA_TransmitCnt>5){
+        if(I2CA_TransmitCnt>2){
             I2caRegs.I2CMDR.bit.IRS = 0;
             I2caRegs.I2CMDR.all=0;
             TS_init(40);
@@ -68,11 +68,11 @@ void I2C_StatusCheck(){
         break;
     case I2CA_Receiving:
         I2CA_RecieveCnt++;
-        if(I2CA_RecieveCnt>5)I2CA_Status = I2CA_ReceiveHang;
+        if(I2CA_RecieveCnt>2)I2CA_Status = I2CA_ReceiveHang;
         break;
     case I2CA_ReceiveFail:
         I2CA_RecieveFailCnt++;
-            if(I2CA_RecieveFailCnt>5){
+            if(I2CA_RecieveFailCnt>2){
                 I2caRegs.I2CMDR.bit.IRS = 0;
                 I2caRegs.I2CMDR.all=0;
                 TS_init(40);
@@ -94,14 +94,18 @@ void TS_checkInteraction(){
             if(!(TS_Status&1)){
                 LastPressedInfo[0].x =TS_Position.x;
                 LastPressedInfo[0].y =TS_Position.y;
-                TS_Status|=1;
+                TS_Status|=3;
             }
+            TS_holdtime=TS_counter;
+
          }else{
              if(TS_Status&1){ TS_holdtime=TS_counter;
                  TS_Status=2;
              }
              LastPressedInfo[1].x =TS_Position.x;
              LastPressedInfo[1].y =TS_Position.y;
+             TS_Position.x =0;
+             TS_Position.y =0;
          }
          switch(TS_Status&1){
              case 0:

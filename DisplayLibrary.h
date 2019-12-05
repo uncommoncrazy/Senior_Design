@@ -33,7 +33,7 @@ extern char string[50];
 extern Uint16  textColor, textFill;
 Uint32 drawFloat(float decimal,Uint32 x,Uint32 y,Uint16 color);
 Uint32 drawThousands(Uint16 decimal,Uint32 x,Uint32 y,Uint16 color);
-void drawButton(Button button);
+void drawButton(Button button, Uint16 state);
 void checkButton(Button* button);
 
 //extern  Font ariel10;

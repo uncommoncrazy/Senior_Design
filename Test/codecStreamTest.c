@@ -87,20 +87,5 @@ __interrupt void MCBSP_isr(void)
              // audioIsReady=1;
               // fill audio buffer
               PieCtrlRegs.PIEACK.all |= PIEACK_GROUP6;
-             // IER|=interruptStore;
-//        // right channel transmission
-//       if(channel)
-//       {
-//           McbspbRegs.DXR1.all = McbspbRegs.DRR1.all;
-//           McbspbRegs.DXR2.all = McbspbRegs.DRR2.all;
-//           channel = left;
-//       }
-//       // left channel transmission
-//       else
-//       {
-//           McbspbRegs.DXR1.all = McbspbRegs.DRR1.all;
-//           McbspbRegs.DXR2.all = McbspbRegs.DRR2.all;
-//           channel = right;
-//       }
-//       PieCtrlRegs.PIEACK.all |= PIEACK_GROUP6;
+
 }

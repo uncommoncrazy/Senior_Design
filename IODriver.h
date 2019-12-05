@@ -25,9 +25,9 @@
 #define     LCD_CD_Command  GpioDataRegs.GPADAT.bit.GPIO12=0
 #define     LCD_CS_Clr      GpioDataRegs.GPADAT.bit.GPIO11=1
 #define     LCD_CS_Set       GpioDataRegs.GPADAT.bit.GPIO11=0
-#define     LCD_Delay       DELAY_US(0.38)
-#define     STROBE_DELAY    DELAY_US(0.01)
-#define     LCD_WR_Strobe   {LCD_Write_On;STROBE_DELAY;LCD_Write_Off;}
+#define     LCD_Delay       DELAY_US(0.0001)
+#define     STROBE_DELAY    DELAY_US(0.0001)
+#define     LCD_WR_Strobe   {LCD_Write_On;LCD_Write_Off;}
 #define     LCD_CS_On       {LCD_CS_Set;STROBE_DELAY;LCD_CS_Set;}
 #define     LCD_CS_Off       {LCD_CS_Clr;STROBE_DELAY;LCD_CS_Clr;}
 #define     LCD_DIR_Write   GpioCtrlRegs.GPADIR.all |= LCDDataPins
@@ -35,6 +35,7 @@
 
 void Init_IO(void);
 void Init_butInterrupt(void(*Xi1ISR),void(*Xi2ISR),void(*Xi3ISR));
+void Init_ADSRPins();
 Uint16  ButtonPressed(Uint16* Current,Uint16* Last);
 Uint16 getSwitches();
 Uint16 getButton();

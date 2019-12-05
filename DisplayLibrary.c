@@ -127,9 +127,7 @@ Uint32 drawCharQ( char letter, Uint32 x, Uint32 y){
 
     return character.width;
 }
-void drawButton(Button button){
-    Uint16 state = button.state;
-    if(!(state&2)){
+void drawButton(Button button, Uint16 state){
             Uint32 x = button.x, y = button.y,width = button.width,height = button.height;
             Uint32 textX=x+(width>>1), textY=y+(height>>1);
             fillRect(x, y, width, height, button.color[state]);
@@ -138,7 +136,7 @@ void drawButton(Button button){
                 textColor = button.colorText[state];
                 printD(button.string, textX, textY);
             }
-    }
+
 }
 void checkButton(Button * button){
     Uint32 x1 =button->x, y1 = button->y;
@@ -147,15 +145,22 @@ void checkButton(Button * button){
     Uint32 fX = LastPressedInfo[ScreenReleased].x, fY = LastPressedInfo[ScreenReleased].y;
     if( (TS_Status&2) && x1<=iX && iX<=x2 && y1<=iY && iY<=y2 && x1<=fX && fX<=x2 && y1<=fY && fY<=y2 ){
         button->state^=0x1;
-        if(TS_holdtime>30){
+        if(TS_holdtime>2){
             button->state|=Button_Held;
         }else{
             //clear held state
             button->state&=1;
         }
-        drawButton(*button);
         TS_Status = 0;
     }
+}
+void checkButtonPress(Button * button){
+    Uint32 x1 =button->x, y1 = button->y;
+    Uint32 x2 = x1+button->width, y2 = y1 +button->height;
+    Uint32 X = TS_Position.x, Y = TS_Position.y;
+    if( x1<= X &&  X<=x2 && y1<=Y && Y<=y2 ){
+            button->state|=Button_Held;
+    }else{button->state=0;}
 }
 
 //Text createText(char* string, Uint16* color, FontInfo font);

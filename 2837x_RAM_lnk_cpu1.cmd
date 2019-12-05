@@ -23,18 +23,18 @@ PAGE 1 :
 
    RAMLS5      : origin = 0x00A800, length = 0x000800
 
-   RAMGS0to11  : origin = 0x00C000, length = 0x00C000
+   RAMGS0to7  : origin = 0x00C000, length = 0x008000
   /* RAMGS1      : origin = 0x00D000, length = 0x001000
    RAMGS2      : origin = 0x00E000, length = 0x001000
    RAMGS3      : origin = 0x00F000, length = 0x001000
    RAMGS4      : origin = 0x010000, length = 0x001000
    RAMGS5      : origin = 0x011000, length = 0x001000
    RAMGS6      : origin = 0x012000, length = 0x001000
-   RAMGS7      : origin = 0x013000, length = 0x001000
+   RAMGS7      : origin = 0x013000, length = 0x001000*/
    RAMGS8      : origin = 0x014000, length = 0x001000
    RAMGS9      : origin = 0x015000, length = 0x001000
    RAMGS10     : origin = 0x016000, length = 0x001000
-   RAMGS11     : origin = 0x017000, length = 0x001000*/
+   RAMGS11     : origin = 0x017000, length = 0x001000
    RAMGS12     : origin = 0x018000, length = 0x001000
    RAMGS13     : origin = 0x019000, length = 0x001000
    RAMGS14     : origin = 0x01A000, length = 0x001000
@@ -66,7 +66,8 @@ SECTIONS
    .stack           : > RAMM1 ,     	PAGE = 1
    .ebss            : > RAMGS14,    		PAGE = 1
    //.econst          : > RAMGS15,    	PAGE = 1
-   DelayLine		: >> RAMGS0to11, PAGE = 1
+   DelayLine		: > RAMGS0to7, PAGE = 1
+   Reverb		: > RAMGS8,   PAGE = 1
  //  .esysmem         : > RAMGS6,    	PAGE = 1
 //   Filter_RegsFile  : > RAMGS0,	   	PAGE = 1
 //   ramgs0           : > RAMGS0,    	PAGE = 1

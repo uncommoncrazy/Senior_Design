@@ -85,7 +85,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Test/Mixertest.c|Test/displaytest.c|Test/finalDemo.c|Test/codecStreamTest.c|Test/buttontest.c|Test/touchscreenTest.c|Test/ADCtest.c|audioFX.c|Sequencer.c|functionManager.c|LCDDriver.c|maxidx_SP_RV_2.asm|part3.c|fudge.c|part4.c|part1m.c|Buffers/circularBuffer.c|quiz.c|InitAIC23.c|main1.c|I2C.c|2837x_FLASH_lnk_cpu1.cmd" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Test/combinedDemo.c|Test/Mixertest.c|Test/displaytest.c|Test/finalDemo.c|Test/codecStreamTest.c|Test/buttontest.c|Test/touchscreenTest.c|Test/ADCtest.c|audioFX.c|Sequencer.c|functionManager.c|LCDDriver.c|maxidx_SP_RV_2.asm|part3.c|fudge.c|part4.c|part1m.c|Buffers/circularBuffer.c|quiz.c|InitAIC23.c|main1.c|I2C.c|2837x_FLASH_lnk_cpu1.cmd" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

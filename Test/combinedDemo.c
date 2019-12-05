@@ -154,7 +154,7 @@ int main(void)
                  // ADSRGate = 0;
 
                    //audioOut = (int16)(((float)((int16)(channel1))*((float)((int16)(channel2)))/32768.0));
-                  if(BufferFilled&& lastconversion>0.009)  reverb();
+                  if(ReverbFilled&& lastconversion>0.009)  reverb();
                   AudioIsReady=0;
        }
 
